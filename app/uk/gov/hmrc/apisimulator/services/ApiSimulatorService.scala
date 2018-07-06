@@ -20,11 +20,10 @@ import akka.actor.ActorSystem
 import com.google.inject.Singleton
 import javax.inject.Inject
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.apisimulator.util.StringUtils
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Promise
 
 case class Hello(message: String)
 
@@ -50,19 +49,12 @@ trait ApiSimulatorService {
 
 @Singleton
 class LiveService @Inject() (system: ActorSystem) extends ApiSimulatorService {
+  import scala.concurrent.duration._
+
   override def userApiWithLatency(latencyInMs: Int)(implicit hc: HeaderCarrier): Future[Hello] = {
-    import scala.concurrent.duration._
-
-    val p = Promise[Hello]
     val delay: FiniteDuration = latencyInMs.millis
-
-    system.scheduler.scheduleOnce(delay) {
-      p.success(Hello("Hello User"))
-    }
-
-    p.future
+    akka.pattern.after[Hello](delay, system.scheduler)(Future.successful(Hello("Hello User")))
   }
-
 
   override def userApiWithData(data: Int)(implicit hc: HeaderCarrier): Future[Hello] = {
     Future.successful(Hello(StringUtils.generateRandomString(data)))
