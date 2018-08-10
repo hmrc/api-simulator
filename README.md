@@ -13,7 +13,7 @@ sbt test
 sbt it:test
 ```
 
-### Examples of how to test the HTTP requests available using `Curl`:
+### Examples of how to test the HTTP requests available using `curl`:
 
 #### POST /user/processBytes
 
