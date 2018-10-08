@@ -32,7 +32,7 @@ lazy val test = Seq(
   "info.cukes" % "cucumber-junit" % "1.2.5" % "test,it"
 )
 
-lazy val plugins: Seq[Plugins] = Seq(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin)
+lazy val plugins: Seq[Plugins] = Seq(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory)
 lazy val playSettings: Seq[Setting[_]] = Seq(routesImport ++= Seq("uk.gov.hmrc.apisimulator.controllers._", "uk.gov.hmrc.domain._"))
 
 lazy val microservice = Project(appName, file("."))
@@ -44,6 +44,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     targetJvm := "jvm-1.8",
     scalaVersion := "2.11.11",
+    majorVersion := 0,
     libraryDependencies ++= appDependencies,
     parallelExecution in Test := false,
     fork in Test := false,

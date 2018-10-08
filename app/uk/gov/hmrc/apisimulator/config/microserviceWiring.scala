@@ -27,7 +27,7 @@ import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.http.ws._
 
 object MicroserviceAuditConnector extends AuditConnector with RunMode {
-  override lazy val auditingConfig: AuditingConfig = LoadAuditingConfig(s"$env.auditing")
+  override lazy val auditingConfig: AuditingConfig = LoadAuditingConfig("auditing")
 }
 
 trait Hooks extends HttpHooks with HttpAuditing {
