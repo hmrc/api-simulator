@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.{Configuration, Play}
+import play.api.Mode.Mode
 import uk.gov.hmrc.apisimulator.connectors.ServiceLocatorConnector
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
@@ -43,6 +45,10 @@ class RegisterInServiceLocatorSpec extends UnitSpec with MockitoSugar with Guice
       when(mockConnector.register(any())).thenReturn(Future.successful(true))
       onStart(app)
       verify(mockConnector).register(any())
+
+      override protected def mode: Mode = Play.current.mode
+
+      override protected def runModeConfiguration: Configuration = Play.current.configuration
     }
 
 
@@ -52,6 +58,9 @@ class RegisterInServiceLocatorSpec extends UnitSpec with MockitoSugar with Guice
 
       onStart(app)
       verify(mockConnector,never()).register(any())
+
+      override protected def mode: Mode = Play.current.mode
+      override protected def runModeConfiguration: Configuration = Play.current.configuration
     }
 
   }
