@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apisimulator.util
+package unit.uk.gov.hmrc.apisimulator.util
 
 import org.scalatest.Matchers
 import uk.gov.hmrc.apisimulator.controllers.HeaderValidator
+import uk.gov.hmrc.apisimulator.util.StringUtils
 import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.util.Random

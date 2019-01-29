@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apisimulator.connectors
+package unit.uk.gov.hmrc.apisimulator.connectors
 
 import org.mockito.Mockito._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mockito.MockitoSugar
+import uk.gov.hmrc.apisimulator.connectors.ServiceLocatorConnector
 import uk.gov.hmrc.apisimulator.domain.Registration
 import uk.gov.hmrc.http.{HeaderCarrier, HttpPost, HttpResponse}
 import uk.gov.hmrc.play.test.UnitSpec

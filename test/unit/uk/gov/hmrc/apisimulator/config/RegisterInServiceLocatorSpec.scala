@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apisimulator.config
+package unit.uk.gov.hmrc.apisimulator.config
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
@@ -22,6 +22,7 @@ import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.{Configuration, Play}
 import play.api.Mode.Mode
+import uk.gov.hmrc.apisimulator.config.ServiceLocatorRegistration
 import uk.gov.hmrc.apisimulator.connectors.ServiceLocatorConnector
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec

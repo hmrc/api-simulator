@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apisimulator.controllers
+package unit.uk.gov.hmrc.apisimulator.controllers
 
 import org.scalatest.Matchers
+import uk.gov.hmrc.apisimulator.controllers.HeaderValidator
 import uk.gov.hmrc.play.test.UnitSpec
 
 class HeaderValidatorSpec extends UnitSpec with Matchers with HeaderValidator{

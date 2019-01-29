@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.apisimulator.controllers
+package unit.uk.gov.hmrc.apisimulator.controllers
 
 import org.scalatest.Matchers
 import play.api.libs.json.Json
+import uk.gov.hmrc.apisimulator.controllers.ErrorAcceptHeaderInvalid
 import uk.gov.hmrc.play.test.UnitSpec
 
 class ErrorResponseSpec extends UnitSpec with Matchers{
