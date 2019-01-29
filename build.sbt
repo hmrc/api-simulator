@@ -32,6 +32,10 @@ lazy val test = Seq(
   "info.cukes" % "cucumber-junit" % "1.2.5" % "test,it"
 )
 
+lazy val IntegrationTest = config("it") extend Test
+lazy val ComponentTest = config("component") extend Test
+val testConfig = Seq(ComponentTest, IntegrationTest, Test)
+
 lazy val plugins: Seq[Plugins] = Seq(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory)
 lazy val playSettings: Seq[Setting[_]] = Seq(routesImport ++= Seq("uk.gov.hmrc.apisimulator.controllers._", "uk.gov.hmrc.domain._"))
 
@@ -41,6 +45,7 @@ lazy val microservice = Project(appName, file("."))
   .settings(scalaSettings: _*)
   .settings(publishingSettings: _*)
   .settings(defaultSettings(): _*)
+  .configs(testConfig: _*)
   .settings(
     targetJvm := "jvm-1.8",
     scalaVersion := "2.11.11",
@@ -52,27 +57,50 @@ lazy val microservice = Project(appName, file("."))
     routesGenerator := StaticRoutesGenerator
   )
   .settings(
-    testOptions in Test := Seq(Tests.Filter(_ => true)),// this removes duplicated lines in HTML reports
-    unmanagedSourceDirectories in Test := Seq(baseDirectory.value / "test" / "unit"),
-    addTestReportOption(Test, "test-reports")
-  )
-  .settings(
     unmanagedResourceDirectories in Compile += baseDirectory.value / "resources"
   )
-  .configs(IntegrationTest)
-  .settings(Defaults.itSettings)
   .settings(
-    Keys.fork in IntegrationTest := false,
-    unmanagedSourceDirectories in IntegrationTest := Seq(baseDirectory.value / "test" / "it" ),
-    addTestReportOption(IntegrationTest, "int-test-reports"),
-    testGrouping in IntegrationTest := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
-    parallelExecution in IntegrationTest := false)
+    unitTestSettings,
+    integrationTestSettings,
+    componentTestSettings)
   .settings(
     resolvers += Resolver.bintrayRepo("hmrc", "releases"),
     resolvers += Resolver.jcenterRepo)
   .settings(ivyScala := ivyScala.value map {
     _.copy(overrideScalaVersion = true)
   })
+
+lazy val unitTestSettings =
+  inConfig(Test)(Defaults.testTasks) ++
+    Seq(
+      testOptions in Test := Seq(Tests.Filter(onPackageName("unit"))),
+      testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oD"),
+      unmanagedSourceDirectories in Test := Seq((baseDirectory in Test).value / "test"),
+      addTestReportOption(Test, "test-reports")
+    )
+
+lazy val integrationTestSettings =
+  inConfig(IntegrationTest)(Defaults.testTasks) ++
+    Seq(
+      testOptions in IntegrationTest := Seq(Tests.Filter(onPackageName("it"))),
+      testOptions in IntegrationTest += Tests.Argument(TestFrameworks.ScalaTest, "-oD"),
+      fork in IntegrationTest := false,
+      parallelExecution in IntegrationTest := false,
+      addTestReportOption(IntegrationTest, "it-reports"))
+
+lazy val componentTestSettings =
+  inConfig(ComponentTest)(Defaults.testTasks) ++
+    Seq(
+      testOptions in ComponentTest := Seq(Tests.Filter(onPackageName("component"))),
+      testOptions in ComponentTest += Tests.Argument(TestFrameworks.ScalaTest, "-oD"),
+      fork in ComponentTest := false,
+      parallelExecution in ComponentTest := false,
+      addTestReportOption(ComponentTest, "component-reports")
+    )
+
+def onPackageName(rootPackage: String): String => Boolean = {
+  testName => testName startsWith rootPackage
+}
 
 def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] =
   tests map {
