@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.apisimulator.config
 
+import akka.actor.ActorSystem
 import com.typesafe.config.Config
 import play.api.{Configuration, Play}
 import play.api.Mode.Mode
@@ -54,7 +55,9 @@ trait WSHttp extends HttpGet with WSGet
   override protected def configuration: Option[Config] = Some(Play.current.configuration.underlying)
 }
 
-object WSHttp extends WSHttp
+object WSHttp extends WSHttp {
+  override protected def actorSystem: ActorSystem = Play.current.actorSystem
+}
 
 object MicroserviceAuthConnector extends AuthConnector with ServicesConfig with WSHttp {
   override val authBaseUrl: String = baseUrl("auth")
@@ -62,4 +65,6 @@ object MicroserviceAuthConnector extends AuthConnector with ServicesConfig with 
   override protected def mode: Mode = Play.current.mode
 
   override protected def runModeConfiguration: Configuration = Play.current.configuration
+
+  override protected def actorSystem: ActorSystem = Play.current.actorSystem
 }
