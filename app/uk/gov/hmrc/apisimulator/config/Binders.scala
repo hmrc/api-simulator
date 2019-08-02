@@ -29,6 +29,6 @@ class SimpleObjectBinder[T](bind: String => T, unbind: T => String)(implicit m: 
   def unbind(key: String, value: T): String = unbind(value)
 }
 
-object Binders extends SimpleObjectBinder[Nino](Nino.apply(_), _.nino)
+object Binders extends SimpleObjectBinder[Nino](Nino(_), _.nino)
 
-object SaUtrBinder extends SimpleObjectBinder[SaUtr](SaUtr.apply(_), _.utr)
+object SaUtrBinder extends SimpleObjectBinder[SaUtr](SaUtr(_), _.utr)

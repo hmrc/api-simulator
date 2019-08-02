@@ -21,37 +21,28 @@ import javax.inject.Inject
 import org.apache.commons.io.FileUtils
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, AnyContent, BodyParsers}
+import play.api.mvc.{Action, AnyContent, BodyParsers, Result}
+import uk.gov.hmrc.apisimulator.domain.Hello
 import uk.gov.hmrc.apisimulator.services._
 import uk.gov.hmrc.apisimulator.util.{BodyParsersUtils, TimeUtils}
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.microservice.controller.BaseController
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel}
+import uk.gov.hmrc.domain.Nino
+import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-trait ApiSimulator extends BaseController with HeaderValidator {
+trait ApiSimulator extends BaseController with HeaderValidator with BodyParsersUtils with AuthorisedFunctions {
 
   def service: ApiSimulatorService
-  implicit val hc: HeaderCarrier
 
-  final def userApiWithLatency(latency: Int): Action[AnyContent] = validateAccept(acceptHeaderValidationRules).async {
+  final def userApiWithLatency(latency: Int): Action[AnyContent] = validateAccept(acceptHeaderValidationRules).async { implicit request =>
     service.userApiWithLatency(latency).map(as => Ok(Json.toJson(as))
     ) recover {
       case _ => Status(ErrorInternalServerError.httpStatusCode)(Json.toJson(ErrorInternalServerError))
     }
   }
 
-  final def nino(nino: uk.gov.hmrc.domain.Nino): Action[AnyContent] = validateAccept(acceptHeaderValidationRules).async {
-    Logger.info(s"Request for nino $nino")
-    Future(Ok(Json.toJson(Hello("Hello Nino"))))
-  }
-
-  final def utr(utr: uk.gov.hmrc.domain.SaUtr): Action[AnyContent] = validateAccept(acceptHeaderValidationRules).async {
-    Future(Ok(Json.toJson(Hello("Hello UTR"))))
-  }
-
-  final def userApiWithData(data: Int): Action[AnyContent] = validateAccept(acceptHeaderValidationRules).async {
+  final def userApiWithData(data: Int): Action[AnyContent] = validateAccept(acceptHeaderValidationRules).async { implicit request =>
     service.userApiWithData(data).map(as => Ok(Json.toJson(as))
     ) recover {
       case _ => Status(ErrorInternalServerError.httpStatusCode)(Json.toJson(ErrorInternalServerError))
@@ -82,6 +73,23 @@ trait ApiSimulator extends BaseController with HeaderValidator {
     }
   }
 
+  def nino(nino: Nino): Action[AnyContent] = validateAccept(acceptHeaderValidationRules).async {
+    handleNino(nino)
+  }
+
+  final def handleNino(nino: Nino): Future[Result] = {
+    Logger.info(s"Request for nino $nino")
+    Future(Ok(Json.toJson(Hello("Hello Nino"))))
+  }
+
+  def utr(utr: uk.gov.hmrc.domain.SaUtr): Action[AnyContent] = validateAccept(acceptHeaderValidationRules).async {
+    handleUtr(utr)
+  }
+
+  final def handleUtr(utr: uk.gov.hmrc.domain.SaUtr) = {
+    Future(Ok(Json.toJson(Hello("Hello UTR"))))
+  }
+
   final def post: Action[JsValue] = Action.async(BodyParsers.parse.json) { implicit request =>
     if (acceptHeaderValidationRules(request.headers.get(ACCEPT))) {
       Future(Ok(Json.toJson(Hello("Hello User"))))
@@ -93,7 +101,7 @@ trait ApiSimulator extends BaseController with HeaderValidator {
 
   final def postProcessBytes: Action[Long] = {
     val beginTime = System.currentTimeMillis()
-    Action.async(BodyParsersUtils.bytesConsumer) { implicit request =>
+    Action.async(bytesConsumer) { implicit request =>
       if (acceptHeaderValidationRules(request.headers.get(ACCEPT))) {
         val endTime = System.currentTimeMillis()
         val msg = s"Total of ${FileUtils.byteCountToDisplaySize(request.body)} read in ${TimeUtils.formatTimeDifference(beginTime, endTime)}"
@@ -117,22 +125,44 @@ trait ApiSimulator extends BaseController with HeaderValidator {
 
 }
 
-object SandboxController extends ApiSimulator {
-  override val service: SandboxService.type = SandboxService
-  override implicit val hc: HeaderCarrier = HeaderCarrier()
+@Singleton
+class SandboxController @Inject()(override val service: SandboxService, override val authConnector: AuthConnector)
+                                 (implicit override val ec: ExecutionContext) extends ApiSimulator
+
+@Singleton
+class LiveController @Inject()(override val service: LiveService, override val authConnector: AuthConnector)
+                              (implicit override val ec: ExecutionContext) extends ApiSimulator
+
+@Singleton
+class AuthLiveController @Inject() (override val service: LiveService, override val authConnector: AuthConnector)
+                                   (implicit override val ec: ExecutionContext) extends ApiSimulator {
+
+  final override def nino(nino: Nino): Action[AnyContent] = validateAccept(acceptHeaderValidationRules).async { implicit request =>
+    authorised(ConfidenceLevel.L50) {
+      handleNino(nino)
+    } recover recovery
+  }
+
+  final override def utr(utr: uk.gov.hmrc.domain.SaUtr): Action[AnyContent] = validateAccept(acceptHeaderValidationRules).async { implicit request =>
+    authorised(ConfidenceLevel.L50) {
+      handleUtr(utr)
+    } recover recovery
+  }
 }
 
 @Singleton
-class LiveController @Inject()(val service: LiveService) extends ApiSimulator {
-  override implicit val hc: HeaderCarrier = HeaderCarrier()
-}
+class IVLiveController @Inject()(override val service: LiveService, override val authConnector: AuthConnector)
+                                (implicit override val ec: ExecutionContext) extends ApiSimulator {
 
-@Singleton
-class AuthLiveController @Inject() (val service: LiveService) extends ApiSimulator {
-  override implicit val hc: HeaderCarrier = HeaderCarrier()
-}
+  final override def nino(nino: Nino): Action[AnyContent] = validateAccept(acceptHeaderValidationRules).async { implicit request =>
+    authorised(ConfidenceLevel.L200) {
+      handleNino(nino)
+    } recover recovery
+  }
 
-@Singleton
-class IVLiveController @Inject()(val service: LiveService) extends ApiSimulator {
-  override implicit val hc: HeaderCarrier = HeaderCarrier()
+  final override def utr(utr: uk.gov.hmrc.domain.SaUtr): Action[AnyContent] = validateAccept(acceptHeaderValidationRules).async { implicit request =>
+    authorised(ConfidenceLevel.L200) {
+      handleUtr(utr)
+    } recover recovery
+  }
 }

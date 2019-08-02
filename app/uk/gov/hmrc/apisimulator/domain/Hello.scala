@@ -18,9 +18,8 @@ package uk.gov.hmrc.apisimulator.domain
 
 import play.api.libs.json.Json
 
-case class Registration(serviceName: String, serviceUrl: String, metadata: Option[Map[String, String]] = None)
+case class Hello(message: String)
 
-object Registration {
-  implicit val format = Json.format[Registration]
+object Hello {
+  implicit val format = Json.format[Hello]
 }
-
