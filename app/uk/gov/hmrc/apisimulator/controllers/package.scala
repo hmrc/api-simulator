@@ -17,7 +17,10 @@
 package uk.gov.hmrc.apisimulator
 
 import play.api.libs.json.{JsValue, Json, Writes}
+import play.api.mvc.Result
+import play.api.mvc.Results.Unauthorized
 import uk.gov.hmrc.apisimulator.config.{Binders, SaUtrBinder}
+import uk.gov.hmrc.auth.core.AuthorisationException
 
 package object controllers {
 
@@ -28,4 +31,8 @@ package object controllers {
   implicit val ninoBinder = Binders
 
   implicit val utrBinder = SaUtrBinder
+
+  def recovery: PartialFunction[Throwable, Result] = {
+    case e: AuthorisationException => Unauthorized(Json.toJson(ErrorUnauthorized))
+  }
 }

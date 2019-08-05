@@ -22,9 +22,11 @@ import play.api.libs.iteratee.Iteratee
 import play.api.libs.streams.Streams
 import play.api.mvc.BodyParser
 
-object BodyParsersUtils {
+import scala.concurrent.ExecutionContext
 
-  import scala.concurrent.ExecutionContext.Implicits.global
+trait BodyParsersUtils {
+
+  implicit def ec: ExecutionContext
 
   val bytesConsumer = BodyParser { req =>
     val iteratee: Iteratee[Array[Byte], Long] =
@@ -38,5 +40,4 @@ object BodyParsersUtils {
       .through[ByteString](Flow[ByteString].map(_.toArray))
       .map(Right(_))
   }
-
 }

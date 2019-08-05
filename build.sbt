@@ -1,5 +1,4 @@
 import _root_.play.core.PlayVersion
-import _root_.play.routes.compiler.StaticRoutesGenerator
 import _root_.play.sbt.PlayImport._
 import _root_.play.sbt.PlayScala
 import _root_.play.sbt.routes.RoutesKeys.routesGenerator
@@ -15,12 +14,12 @@ lazy val appDependencies: Seq[ModuleID] = compile ++ test
 lazy val compile = Seq(
   ws,
   "org.apache.commons" % "commons-io" % "1.3.2",
-  "uk.gov.hmrc" %% "microservice-bootstrap" % "10.6.0",
-  "uk.gov.hmrc" %% "domain" % "5.1.0"
+  "uk.gov.hmrc" %% "bootstrap-play-25" % "4.13.0",
+  "uk.gov.hmrc" %% "domain" % "5.6.0-play-25"
 )
 
 lazy val test = Seq(
-  "uk.gov.hmrc" %% "hmrctest" % "3.3.0" % "test,it",
+  "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-25" % "test,it",
   "org.scalaj" %% "scalaj-http" % "2.3.0" % "test,it",
   "org.scalatest" %% "scalatest" % "3.0.4" % "test,it",
   "org.pegdown" % "pegdown" % "1.6.0" % "test,it",
@@ -54,7 +53,7 @@ lazy val microservice = Project(appName, file("."))
     parallelExecution in Test := false,
     fork in Test := false,
     retrieveManaged := true,
-    routesGenerator := StaticRoutesGenerator
+    routesGenerator := InjectedRoutesGenerator
   )
   .settings(
     unmanagedResourceDirectories in Compile += baseDirectory.value / "resources"

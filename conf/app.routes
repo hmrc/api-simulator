@@ -2,14 +2,14 @@
 GET         /api/definition                   uk.gov.hmrc.apisimulator.controllers.Documentation.definition()
 GET         /api/conf/:version/*file          uk.gov.hmrc.apisimulator.controllers.Documentation.conf(version, file)
 
-GET         /user/latency/:latency            @uk.gov.hmrc.apisimulator.controllers.LiveController.userApiWithLatency(latency: Int)
-GET         /user/data/:data                  @uk.gov.hmrc.apisimulator.controllers.LiveController.userApiWithData(data: Int)
-GET         /world                            @uk.gov.hmrc.apisimulator.controllers.LiveController.world
-GET         /application                      @uk.gov.hmrc.apisimulator.controllers.LiveController.application
-GET         /user                             @uk.gov.hmrc.apisimulator.controllers.LiveController.user
-POST        /user                             @uk.gov.hmrc.apisimulator.controllers.LiveController.post()
-POST        /user/processBytes                @uk.gov.hmrc.apisimulator.controllers.LiveController.postProcessBytes()
-PUT         /user                             @uk.gov.hmrc.apisimulator.controllers.LiveController.put()
+GET         /user/latency/:latency            uk.gov.hmrc.apisimulator.controllers.LiveController.userApiWithLatency(latency: Int)
+GET         /user/data/:data                  uk.gov.hmrc.apisimulator.controllers.LiveController.userApiWithData(data: Int)
+GET         /world                            uk.gov.hmrc.apisimulator.controllers.LiveController.world
+GET         /application                      uk.gov.hmrc.apisimulator.controllers.LiveController.application
+GET         /user                             uk.gov.hmrc.apisimulator.controllers.LiveController.user
+POST        /user                             uk.gov.hmrc.apisimulator.controllers.LiveController.post()
+POST        /user/processBytes                uk.gov.hmrc.apisimulator.controllers.LiveController.postProcessBytes()
+PUT         /user                             uk.gov.hmrc.apisimulator.controllers.LiveController.put()
 
 GET         /sandbox/user/latency/:latency    uk.gov.hmrc.apisimulator.controllers.SandboxController.userApiWithLatency(latency: Int)
 GET         /sandbox/user/data/:data          uk.gov.hmrc.apisimulator.controllers.SandboxController.userApiWithData(data: Int)
@@ -21,10 +21,10 @@ POST        /sandbox/user/processBytes        uk.gov.hmrc.apisimulator.controlle
 PUT         /sandbox/user                     uk.gov.hmrc.apisimulator.controllers.SandboxController.put()
 
 # Auth Requests
-GET         /paye/:nino/login                 @uk.gov.hmrc.apisimulator.controllers.AuthLiveController.nino(nino: Nino)
-GET         /paye/:nino/iv                    @uk.gov.hmrc.apisimulator.controllers.IVLiveController.nino(nino: Nino)
-GET         /sa/:utr/iv                       @uk.gov.hmrc.apisimulator.controllers.IVLiveController.utr(utr: SaUtr)
-GET         /sa/:utr/login                    @uk.gov.hmrc.apisimulator.controllers.AuthLiveController.utr(utr: SaUtr)
+GET         /paye/:nino/login                 uk.gov.hmrc.apisimulator.controllers.AuthLiveController.nino(nino: Nino)
+GET         /paye/:nino/iv                    uk.gov.hmrc.apisimulator.controllers.IVLiveController.nino(nino: Nino)
+GET         /sa/:utr/iv                       uk.gov.hmrc.apisimulator.controllers.IVLiveController.utr(utr: SaUtr)
+GET         /sa/:utr/login                    uk.gov.hmrc.apisimulator.controllers.AuthLiveController.utr(utr: SaUtr)
 GET         /sandbox/paye/:nino/login         uk.gov.hmrc.apisimulator.controllers.SandboxController.nino(nino: Nino)
 GET         /sandbox/paye/:nino/iv            uk.gov.hmrc.apisimulator.controllers.SandboxController.nino(nino: Nino)
 GET         /sandbox/sa/:utr/iv               uk.gov.hmrc.apisimulator.controllers.SandboxController.utr(utr: SaUtr)

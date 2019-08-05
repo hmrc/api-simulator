@@ -19,20 +19,11 @@ package uk.gov.hmrc.apisimulator.services
 import akka.actor.ActorSystem
 import com.google.inject.Singleton
 import javax.inject.Inject
-import play.api.libs.json.Json
+import uk.gov.hmrc.apisimulator.domain.Hello
 import uk.gov.hmrc.apisimulator.util.StringUtils
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.ExecutionContext.Implicits.global
-
-case class Hello(message: String)
-
-import scala.concurrent.Future
-
-object Hello {
-  implicit val format = Json.format[Hello]
-}
-
+import scala.concurrent.{ExecutionContext, Future}
 
 trait ApiSimulatorService {
   def userApiWithLatency(latency: Int)(implicit hc: HeaderCarrier): Future[Hello]
@@ -48,7 +39,7 @@ trait ApiSimulatorService {
 }
 
 @Singleton
-class LiveService @Inject() (system: ActorSystem) extends ApiSimulatorService {
+class LiveService @Inject() (system: ActorSystem)(implicit val ec: ExecutionContext) extends ApiSimulatorService {
   import scala.concurrent.duration._
 
   override def userApiWithLatency(latencyInMs: Int)(implicit hc: HeaderCarrier): Future[Hello] = {
@@ -73,7 +64,8 @@ class LiveService @Inject() (system: ActorSystem) extends ApiSimulatorService {
   }
 }
 
-object SandboxService extends ApiSimulatorService {
+@Singleton
+class SandboxService extends ApiSimulatorService {
   override def userApiWithLatency(latencyInMs: Int)(implicit hc: HeaderCarrier): Future[Hello] = {
     Thread.sleep(latencyInMs)
     Future.successful(Hello("Hello Sandbox User"))

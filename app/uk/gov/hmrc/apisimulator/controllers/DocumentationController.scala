@@ -16,12 +16,15 @@
 
 package uk.gov.hmrc.apisimulator.controllers
 
+import com.google.inject.Singleton
 import controllers.AssetsBuilder
-import play.api.http.{HttpErrorHandler, LazyHttpErrorHandler}
+import javax.inject.Inject
+import play.api.http.HttpErrorHandler
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.microservice.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
-class Documentation(httpErrorHandler: HttpErrorHandler) extends AssetsBuilder(httpErrorHandler) with BaseController {
+@Singleton
+class Documentation @Inject()(httpErrorHandler: HttpErrorHandler) extends AssetsBuilder(httpErrorHandler) with BaseController {
 
   def definition(): Action[AnyContent] = {
     super.at(s"/public/api", "definition.json")
@@ -31,5 +34,3 @@ class Documentation(httpErrorHandler: HttpErrorHandler) extends AssetsBuilder(ht
     super.at(s"/public/api/conf/${version}", file)
   }
 }
-
-object Documentation extends Documentation(LazyHttpErrorHandler)
