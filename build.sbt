@@ -14,7 +14,7 @@ lazy val appDependencies: Seq[ModuleID] = compile ++ test
 lazy val compile = Seq(
   ws,
   "org.apache.commons" % "commons-io" % "1.3.2",
-  "uk.gov.hmrc" %% "bootstrap-play-25" % "4.13.0",
+  "uk.gov.hmrc" %% "bootstrap-play-25" % "5.1.0",
   "uk.gov.hmrc" %% "domain" % "5.6.0-play-25"
 )
 
