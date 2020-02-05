@@ -14,12 +14,12 @@ lazy val appDependencies: Seq[ModuleID] = compile ++ test
 lazy val compile = Seq(
   ws,
   "org.apache.commons" % "commons-io" % "1.3.2",
-  "uk.gov.hmrc" %% "bootstrap-play-25" % "5.1.0",
-  "uk.gov.hmrc" %% "domain" % "5.6.0-play-25"
+  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.3.0",
+  "uk.gov.hmrc" %% "domain" % "5.6.0-play-26"
 )
 
 lazy val test = Seq(
-  "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-25" % "test,it",
+  "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % "test,it",
   "org.scalaj" %% "scalaj-http" % "2.3.0" % "test,it",
   "org.scalatest" %% "scalatest" % "3.0.4" % "test,it",
   "org.pegdown" % "pegdown" % "1.6.0" % "test,it",
