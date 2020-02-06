@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,13 @@
 
 package uk.gov.hmrc.apisimulator.util
 
-import akka.stream.scaladsl.{Flow, Sink}
+import akka.stream.scaladsl.Flow
 import akka.util.ByteString
-import org.reactivestreams.Subscriber
 import play.api.libs.iteratee.Iteratee
-import play.api.libs.iteratee.streams.IterateeStreams
-import play.api.libs.streams.Accumulator
+import play.api.libs.streams.Streams
 import play.api.mvc.BodyParser
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 trait BodyParsersUtils {
 
@@ -37,11 +35,9 @@ trait BodyParsersUtils {
           bytes.length + length
         }
       }
-    val subscriber: (Subscriber[Array[Byte]], Iteratee[Array[Byte], Long]) = IterateeStreams.iterateeToSubscriber(iteratee)
-    val result: Future[Long] = subscriber._2.run
-    val sink: Sink[Array[Byte], Future[Long]] = Sink.fromSubscriber(subscriber._1).mapMaterializedValue(_ => result)
 
-    Accumulator(sink).through[ByteString](Flow[ByteString].map(_.toArray))
-    .map(Right(_))
+    Streams.iterateeToAccumulator(iteratee)
+      .through[ByteString](Flow[ByteString].map(_.toArray))
+      .map(Right(_))
   }
 }

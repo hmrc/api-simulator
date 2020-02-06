@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Result
-import play.api.test.{FakeRequest, StubControllerComponentsFactory}
+import play.api.test.FakeRequest
 import play.mvc.Http.Status.{OK, UNAUTHORIZED}
 import uk.gov.hmrc.apisimulator.controllers.{AuthLiveController, IVLiveController}
 import uk.gov.hmrc.apisimulator.services.LiveService
@@ -47,12 +47,12 @@ class ApiSimulatorSpec extends UnitSpec with WithFakeApplication with MockitoSug
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
   }
 
-  trait AuthLiveSetup extends Setup with StubControllerComponentsFactory {
-    val underTest = new AuthLiveController(mock[LiveService], mockAuthConnector, stubControllerComponents())
+  trait AuthLiveSetup extends Setup {
+    val underTest = new AuthLiveController(mock[LiveService], mockAuthConnector)
   }
 
-  trait IVLiveSetup extends Setup with StubControllerComponentsFactory {
-    val underTest = new IVLiveController(mock[LiveService], mockAuthConnector, stubControllerComponents())
+  trait IVLiveSetup extends Setup {
+    val underTest = new IVLiveController(mock[LiveService], mockAuthConnector)
   }
 
   "AuthLiveController" when {
