@@ -30,18 +30,21 @@ trait BodyParsersUtils {
 
   implicit def ec: ExecutionContext
 
-  val bytesConsumer = BodyParser { req =>
-    val iteratee: Iteratee[Array[Byte], Long] =
-      Iteratee.fold[Array[Byte], Long](0) {
-        (length, bytes) => {
-          bytes.length + length
-        }
-      }
-    val subscriber: (Subscriber[Array[Byte]], Iteratee[Array[Byte], Long]) = IterateeStreams.iterateeToSubscriber(iteratee)
-    val result: Future[Long] = subscriber._2.run
-    val sink: Sink[Array[Byte], Future[Long]] = Sink.fromSubscriber(subscriber._1).mapMaterializedValue(_ => result)
-
-    Accumulator(sink).through[ByteString](Flow[ByteString].map(_.toArray))
-    .map(Right(_))
+  val bytesConsumer: BodyParser[Long] = BodyParser { req =>
+    val sink = Sink.fold(0L)( (u,t: ByteString) => u + t.length)
+    Accumulator(sink).map(Right.apply)
+//
+//    val iteratee: Iteratee[Array[Byte], Long] =
+//      Iteratee.fold[Array[Byte], Long](0) {
+//        (length, bytes) => {
+//          bytes.length + length
+//        }
+//      }
+//    val subscriber: (Subscriber[Array[Byte]], Iteratee[Array[Byte], Long]) = IterateeStreams.iterateeToSubscriber(iteratee)
+//    val result: Future[Long] = subscriber._2.run
+//    val sink: Sink[Array[Byte], Future[Long]] = Sink.fromSubscriber(subscriber._1).mapMaterializedValue(_ => result)
+//
+//    Accumulator(sink).through[ByteString](Flow[ByteString].map(_.toArray))
+//    .map(Right(_))
   }
 }
