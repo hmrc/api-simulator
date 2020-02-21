@@ -16,35 +16,19 @@
 
 package uk.gov.hmrc.apisimulator.util
 
-import akka.stream.scaladsl.{Flow, Sink}
+import akka.stream.scaladsl.Sink
 import akka.util.ByteString
-import org.reactivestreams.Subscriber
-import play.api.libs.iteratee.Iteratee
-import play.api.libs.iteratee.streams.IterateeStreams
 import play.api.libs.streams.Accumulator
 import play.api.mvc.BodyParser
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 trait BodyParsersUtils {
 
   implicit def ec: ExecutionContext
 
   val bytesConsumer: BodyParser[Long] = BodyParser { req =>
-    val sink = Sink.fold(0L)( (u,t: ByteString) => u + t.length)
+    val sink = Sink.fold(0L)((u, t: ByteString) => u + t.length)
     Accumulator(sink).map(Right.apply)
-//
-//    val iteratee: Iteratee[Array[Byte], Long] =
-//      Iteratee.fold[Array[Byte], Long](0) {
-//        (length, bytes) => {
-//          bytes.length + length
-//        }
-//      }
-//    val subscriber: (Subscriber[Array[Byte]], Iteratee[Array[Byte], Long]) = IterateeStreams.iterateeToSubscriber(iteratee)
-//    val result: Future[Long] = subscriber._2.run
-//    val sink: Sink[Array[Byte], Future[Long]] = Sink.fromSubscriber(subscriber._1).mapMaterializedValue(_ => result)
-//
-//    Accumulator(sink).through[ByteString](Flow[ByteString].map(_.toArray))
-//    .map(Right(_))
   }
 }
