@@ -20,7 +20,8 @@ import play.api.http.HeaderNames.ACCEPT
 import play.api.libs.json.Json
 import play.api.mvc.{ActionBuilder, ActionFilter, AnyContent, BodyParser, Request, Result, Results}
 
-import scala.concurrent.{ExecutionContext, Future}
+
+import scala.concurrent.Future
 import scala.util.matching.Regex
 import scala.util.matching.Regex.Match
 
@@ -45,5 +46,6 @@ trait HeaderValidator extends Results {
     }
 
     override protected def executionContext: ExecutionContext = ec
+
   }
 }

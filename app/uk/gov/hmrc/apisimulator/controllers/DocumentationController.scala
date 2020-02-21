@@ -17,13 +17,14 @@
 package uk.gov.hmrc.apisimulator.controllers
 
 import com.google.inject.Singleton
-import controllers.{AssetsBuilder, AssetsMetadata}
+import controllers.AssetsBuilder
 import javax.inject.Inject
 import play.api.http.HttpErrorHandler
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 @Singleton
-class Documentation @Inject()(httpErrorHandler: HttpErrorHandler, cc: ControllerComponents, meta: AssetsMetadata) extends AssetsBuilder(httpErrorHandler, meta) {
+class Documentation @Inject()(httpErrorHandler: HttpErrorHandler) extends AssetsBuilder(httpErrorHandler) with BaseController {
 
   def definition(): Action[AnyContent] = {
     super.at(s"/public/api", "definition.json")
