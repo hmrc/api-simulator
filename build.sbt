@@ -12,7 +12,6 @@ lazy val appName = "api-simulator"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test
 
 lazy val compile = Seq(
-  ws,
   "org.apache.commons" % "commons-io" % "1.3.2",
   "uk.gov.hmrc" %% "bootstrap-play-25" % "5.1.0",
   "uk.gov.hmrc" %% "domain" % "5.6.0-play-25"
@@ -24,7 +23,7 @@ lazy val test = Seq(
   "org.scalatest" %% "scalatest" % "3.0.4" % "test,it",
   "org.pegdown" % "pegdown" % "1.6.0" % "test,it",
   "com.typesafe.play" %% "play-test" % PlayVersion.current % "test,it",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.1" % "test,it",
+  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.0" % "test,it",
   "org.mockito" % "mockito-core" % "2.12.0" % "test,it",
   "com.github.tomakehurst" % "wiremock" % "2.11.0" % "test,it",
   "info.cukes" %% "cucumber-scala" % "1.2.5" % "test,it",
@@ -47,13 +46,14 @@ lazy val microservice = Project(appName, file("."))
   .configs(testConfig: _*)
   .settings(
     targetJvm := "jvm-1.8",
-    scalaVersion := "2.11.11",
+    scalaVersion := "2.12.10",
     majorVersion := 0,
     libraryDependencies ++= appDependencies,
+    dependencyOverrides ++= jettyOverrides,
+
     parallelExecution in Test := false,
     fork in Test := false,
-    retrieveManaged := true,
-    routesGenerator := InjectedRoutesGenerator
+    retrieveManaged := true
   )
   .settings(
     unmanagedResourceDirectories in Compile += baseDirectory.value / "resources"
@@ -65,9 +65,32 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     resolvers += Resolver.bintrayRepo("hmrc", "releases"),
     resolvers += Resolver.jcenterRepo)
-  .settings(ivyScala := ivyScala.value map {
-    _.copy(overrideScalaVersion = true)
-  })
+
+val jettyVersion = "9.2.24.v20180105"
+// we need to override the akka version for now as newer versions are not compatible with reactivemongo
+lazy val akkaVersion = "2.5.23"
+lazy val akkaHttpVersion = "10.0.15"
+val jettyOverrides: Seq[ModuleID] = Seq(
+  "org.eclipse.jetty" % "jetty-server" % jettyVersion % IntegrationTest,
+  "org.eclipse.jetty" % "jetty-servlet" % jettyVersion % IntegrationTest,
+  "org.eclipse.jetty" % "jetty-security" % jettyVersion % IntegrationTest,
+  "org.eclipse.jetty" % "jetty-servlets" % jettyVersion % IntegrationTest,
+  "org.eclipse.jetty" % "jetty-continuation" % jettyVersion % IntegrationTest,
+  "org.eclipse.jetty" % "jetty-webapp" % jettyVersion % IntegrationTest,
+  "org.eclipse.jetty" % "jetty-xml" % jettyVersion % IntegrationTest,
+  "org.eclipse.jetty" % "jetty-client" % jettyVersion % IntegrationTest,
+  "org.eclipse.jetty" % "jetty-http" % jettyVersion % IntegrationTest,
+  "org.eclipse.jetty" % "jetty-io" % jettyVersion % IntegrationTest,
+  "org.eclipse.jetty" % "jetty-util" % jettyVersion % IntegrationTest,
+  "org.eclipse.jetty.websocket" % "websocket-api" % jettyVersion % IntegrationTest,
+  "org.eclipse.jetty.websocket" % "websocket-common" % jettyVersion % IntegrationTest,
+  "org.eclipse.jetty.websocket" % "websocket-client" % jettyVersion % IntegrationTest,
+  "com.typesafe.akka" %% "akka-stream" % akkaVersion,
+  "com.typesafe.akka" %% "akka-protobuf" % akkaVersion,
+  "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
+  "com.typesafe.akka" %% "akka-actor" % akkaVersion,
+  "com.typesafe.akka" %% "akka-http-core" % akkaHttpVersion
+)
 
 lazy val unitTestSettings =
   inConfig(Test)(Defaults.testTasks) ++
@@ -100,11 +123,6 @@ lazy val componentTestSettings =
 def onPackageName(rootPackage: String): String => Boolean = {
   testName => testName startsWith rootPackage
 }
-
-def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] =
-  tests map {
-    test => Group(test.name, Seq(test), SubProcess(ForkOptions(runJVMOptions = Seq("-Dtest.name=" + test.name))))
-  }
 
 // Coverage configuration
 coverageMinimum := 20

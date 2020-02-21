@@ -28,16 +28,9 @@ trait BodyParsersUtils {
 
   implicit def ec: ExecutionContext
 
-  val bytesConsumer = BodyParser { req =>
-    val iteratee: Iteratee[Array[Byte], Long] =
-      Iteratee.fold[Array[Byte], Long](0) {
-        (length, bytes) => {
-          bytes.length + length
-        }
-      }
+  val bytesConsumer: BodyParser[Long] = BodyParser { req =>
+    val sink = Sink.fold(0L)( (u,t: ByteString) => u + t.length)
+    Accumulator(sink).map(Right.apply)
 
-    Streams.iterateeToAccumulator(iteratee)
-      .through[ByteString](Flow[ByteString].map(_.toArray))
-      .map(Right(_))
   }
 }
