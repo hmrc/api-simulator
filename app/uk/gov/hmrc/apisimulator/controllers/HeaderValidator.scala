@@ -35,12 +35,6 @@ trait HeaderValidator extends Results {
   val acceptHeaderValidationRules: Option[String] => Boolean =
     _ flatMap (a => matchHeader(a) map (res => validateContentType(res.group("contenttype")) && validateVersion(res.group("version")))) getOrElse false
 
-//  def validateAccept(rules: Option[String] => Boolean) = new ActionBuilder[Request, AnyContent] {
-//    def invokeBlock[A](request: Request[A], block: (Request[A]) => Future[Result]) = {
-//      if (rules(request.headers.get(ACCEPT))) block(request)
-//      else Future.successful(Status(ErrorAcceptHeaderInvalid.httpStatusCode)(Json.toJson(ErrorAcceptHeaderInvalid)))
-//    }
-
   def validateAccept(rules: Option[String] => Boolean)(implicit ec: ExecutionContext) = new ActionFilter[Request] {
     override protected def filter[A](request: Request[A]): Future[Option[Result]] = Future.successful {
       if (rules(request.headers.get(ACCEPT))) {
