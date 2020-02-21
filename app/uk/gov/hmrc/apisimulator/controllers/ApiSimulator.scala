@@ -27,11 +27,11 @@ import uk.gov.hmrc.apisimulator.services._
 import uk.gov.hmrc.apisimulator.util.{BodyParsersUtils, TimeUtils}
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel}
 import uk.gov.hmrc.domain.Nino
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait ApiSimulator extends BaseController with HeaderValidator with BodyParsersUtils with AuthorisedFunctions {
+trait ApiSimulator extends BackendController with HeaderValidator with BodyParsersUtils with AuthorisedFunctions {
 
   def service: ApiSimulatorService
 
@@ -126,16 +126,16 @@ trait ApiSimulator extends BaseController with HeaderValidator with BodyParsersU
 }
 
 @Singleton
-class SandboxController @Inject()(override val service: SandboxService, override val authConnector: AuthConnector)
-                                 (implicit override val ec: ExecutionContext) extends ApiSimulator
+class SandboxController @Inject()(override val service: SandboxService, override val authConnector: AuthConnector, cc: ControllerComponents)
+                                 (implicit override val ec: ExecutionContext) extends BackendController(cc) with ApiSimulator
 
 @Singleton
-class LiveController @Inject()(override val service: LiveService, override val authConnector: AuthConnector)
-                              (implicit override val ec: ExecutionContext) extends ApiSimulator
+class LiveController @Inject()(override val service: LiveService, override val authConnector: AuthConnector, cc: ControllerComponents)
+                              (implicit override val ec: ExecutionContext)  extends BackendController(cc) with ApiSimulator
 
 @Singleton
-class AuthLiveController @Inject() (override val service: LiveService, override val authConnector: AuthConnector)
-                                   (implicit override val ec: ExecutionContext) extends ApiSimulator {
+class AuthLiveController @Inject() (override val service: LiveService, override val authConnector: AuthConnector, cc: ControllerComponents)
+                                   (implicit override val ec: ExecutionContext) extends BackendController(cc) with ApiSimulator {
 
   final override def nino(nino: Nino): Action[AnyContent] = (Action andThen validateAccept(acceptHeaderValidationRules)).async { implicit request =>
     authorised(ConfidenceLevel.L50) {
@@ -166,6 +166,4 @@ class IVLiveController @Inject()(override val service: LiveService, override val
       handleUtr(utr)
     } recover recovery
   }
-
-
 }

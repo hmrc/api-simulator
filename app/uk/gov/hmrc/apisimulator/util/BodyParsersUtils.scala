@@ -16,10 +16,9 @@
 
 package uk.gov.hmrc.apisimulator.util
 
-import akka.stream.scaladsl.Flow
+import akka.stream.scaladsl.Sink
 import akka.util.ByteString
-import play.api.libs.iteratee.Iteratee
-import play.api.libs.streams.Streams
+import play.api.libs.streams.Accumulator
 import play.api.mvc.BodyParser
 
 import scala.concurrent.ExecutionContext

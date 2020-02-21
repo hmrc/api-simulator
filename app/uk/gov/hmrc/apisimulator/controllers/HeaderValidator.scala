@@ -20,8 +20,7 @@ import play.api.http.HeaderNames.ACCEPT
 import play.api.libs.json.Json
 import play.api.mvc.{ActionBuilder, ActionFilter, AnyContent, BodyParser, Request, Result, Results}
 
-
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.matching.Regex
 import scala.util.matching.Regex.Match
 
