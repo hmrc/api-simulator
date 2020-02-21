@@ -21,9 +21,10 @@ import controllers.AssetsMetadata
 import org.scalatest.TestData
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.OneAppPerTest
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.LazyHttpErrorHandler
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.libs.json.JsValue
+import play.api.mvc.Result
 import play.api.test.{FakeRequest, StubControllerComponentsFactory}
 import play.api.{Application, Mode}
 import play.mvc.Http.Status.OK
@@ -62,8 +63,8 @@ class PlatformIntegrationSpec extends UnitSpec with ScalaFutures with OneAppPerT
     }
 
     "provide RAML conf endpoint and RAML for each version" in new Setup {
-      val definitionResult = documentationController.definition()(request)
-      val definitionResponse = jsonBodyOf(definitionResult).futureValue
+      val definitionResult: Result = await(documentationController.definition()(request))
+      val definitionResponse: JsValue = jsonBodyOf(definitionResult)
       val versions: Seq[String] = (definitionResponse \\ "version") map (_.as[String])
 
       versions.foreach { version =>
