@@ -64,9 +64,6 @@ lazy val microservice = Project(appName, file("."))
     unitTestSettings,
     integrationTestSettings,
     componentTestSettings)
-  .settings(
-    resolvers += Resolver.bintrayRepo("hmrc", "releases"),
-    resolvers += Resolver.jcenterRepo)
 
 val jettyVersion = "9.2.24.v20180105"
 // we need to override the akka version for now as newer versions are not compatible with reactivemongo
