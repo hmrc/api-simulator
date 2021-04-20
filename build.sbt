@@ -13,7 +13,7 @@ lazy val appDependencies: Seq[ModuleID] = compile ++ test
 
 lazy val compile = Seq(
   "org.apache.commons" % "commons-io" % "1.3.2",
-  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.3.0",
+  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.4.0",
   "uk.gov.hmrc" %% "domain" % "5.6.0-play-26",
   "com.typesafe.play" %% "play-iteratees" % "2.6.1",
   "com.typesafe.play" %% "play-iteratees-reactive-streams" % "2.6.1"
@@ -22,11 +22,10 @@ lazy val compile = Seq(
 lazy val test = Seq(
   "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % "test,it",
   "org.scalaj" %% "scalaj-http" % "2.3.0" % "test,it",
-  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.3.0" % "test,it",
   "org.scalatest" %% "scalatest" % "3.0.4" % "test,it",
   "org.pegdown" % "pegdown" % "1.6.0" % "test,it",
   "com.typesafe.play" %% "play-test" % PlayVersion.current % "test,it",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.0" % "test,it",
+  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3" % "test,it",
   "org.mockito" % "mockito-core" % "2.12.0" % "test,it",
   "com.github.tomakehurst" % "wiremock" % "2.11.0" % "test,it",
   "info.cukes" %% "cucumber-scala" % "1.2.5" % "test,it",
@@ -49,7 +48,7 @@ lazy val microservice = Project(appName, file("."))
   .configs(testConfig: _*)
   .settings(
     targetJvm := "jvm-1.8",
-    scalaVersion := "2.12.10",
+    scalaVersion := "2.12.12",
     majorVersion := 0,
     libraryDependencies ++= appDependencies,
     dependencyOverrides ++= jettyOverrides,
@@ -65,9 +64,6 @@ lazy val microservice = Project(appName, file("."))
     unitTestSettings,
     integrationTestSettings,
     componentTestSettings)
-  .settings(
-    resolvers += Resolver.bintrayRepo("hmrc", "releases"),
-    resolvers += Resolver.jcenterRepo)
 
 val jettyVersion = "9.2.24.v20180105"
 // we need to override the akka version for now as newer versions are not compatible with reactivemongo
