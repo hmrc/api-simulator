@@ -18,6 +18,7 @@ package uk.gov.hmrc.apisimulator.util
 
 import org.apache.commons.lang3.RandomStringUtils
 
+
 object StringUtils {
 
   def generateRandomString(numberOfChars: Int): String = RandomStringUtils.randomAlphanumeric(numberOfChars)
