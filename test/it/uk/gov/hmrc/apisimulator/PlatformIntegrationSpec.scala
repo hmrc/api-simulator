@@ -18,9 +18,7 @@ package it.uk.gov.hmrc.apisimulator
 
 import akka.stream.Materializer
 import controllers.AssetsMetadata
-import org.scalatest.TestData
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.play.OneAppPerTest
 import play.api.http.LazyHttpErrorHandler
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.JsValue
@@ -30,6 +28,7 @@ import play.api.{Application, Mode}
 import play.mvc.Http.Status.OK
 import uk.gov.hmrc.apisimulator.controllers.Documentation
 import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 
 /**
   * Testcase to verify the capability of integration with the API platform.
@@ -40,9 +39,9 @@ import uk.gov.hmrc.play.test.UnitSpec
   *
   * See: "API Platform Architecture with Flows" on Confluence.
   */
-class PlatformIntegrationSpec extends UnitSpec with ScalaFutures with OneAppPerTest with StubControllerComponentsFactory {
+class PlatformIntegrationSpec extends UnitSpec with ScalaFutures with GuiceOneServerPerSuite with StubControllerComponentsFactory {
 
-  override def newAppForTest(testData: TestData): Application = GuiceApplicationBuilder()
+  override def fakeApplication(): Application = GuiceApplicationBuilder()
     .configure("run.mode" -> "Stub")
     .configure(Map(
       "appName" -> "application-name",

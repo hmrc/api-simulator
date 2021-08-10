@@ -12,25 +12,24 @@ lazy val appName = "api-simulator"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test
 
 lazy val compile = Seq(
-  "commons-io" % "commons-io" % "1.3.2",
-  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.4.0",
-  "uk.gov.hmrc" %% "domain" % "5.6.0-play-26",
-  "com.typesafe.play" %% "play-iteratees" % "2.6.1",
-  "com.typesafe.play" %% "play-iteratees-reactive-streams" % "2.6.1"
+  "org.apache.commons"  %  "commons-io"                       % "1.3.2",
+  "uk.gov.hmrc"         %% "bootstrap-backend-play-26"        % "5.10.0",
+  "uk.gov.hmrc"         %% "domain"                           % "5.6.0-play-26",
+  "com.typesafe.play"   %% "play-iteratees"                   % "2.6.1",
+  "com.typesafe.play"   %% "play-iteratees-reactive-streams"  % "2.6.1"
 )
 
 lazy val test = Seq(
-  "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % "test,it",
-  "org.scalaj" %% "scalaj-http" % "2.3.0" % "test,it",
-  "org.scalatest" %% "scalatest" % "3.0.4" % "test,it",
-  "org.pegdown" % "pegdown" % "1.6.0" % "test,it",
-  "com.typesafe.play" %% "play-test" % PlayVersion.current % "test,it",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3" % "test,it",
-  "org.mockito" % "mockito-core" % "2.12.0" % "test,it",
-  "com.github.tomakehurst" % "wiremock" % "2.11.0" % "test,it",
-  "info.cukes" %% "cucumber-scala" % "1.2.5" % "test,it",
-  "info.cukes" % "cucumber-junit" % "1.2.5" % "test,it"
-)
+  "uk.gov.hmrc"             %% "hmrctest"                     % "3.9.0-play-26",
+  "org.scalaj"              %% "scalaj-http"                  % "2.3.0",
+  "org.pegdown"             %  "pegdown"                      % "1.6.0",
+  "com.typesafe.play"       %% "play-test"                    % PlayVersion.current,
+  "org.scalatestplus.play"  %% "scalatestplus-play"           % "3.1.3",
+  "org.mockito"             %  "mockito-core"                 % "2.12.0",
+  "com.github.tomakehurst"  %  "wiremock-jre8-standalone"     % "2.27.2",
+  "info.cukes"              %% "cucumber-scala"               % "1.2.5",
+  "info.cukes"              %  "cucumber-junit"               % "1.2.5"
+).map(_ % "test, it")
 
 lazy val IntegrationTest = config("it") extend Test
 lazy val ComponentTest = config("component") extend Test
@@ -51,7 +50,7 @@ lazy val microservice = Project(appName, file("."))
     scalaVersion := "2.12.12",
     majorVersion := 0,
     libraryDependencies ++= appDependencies,
-    dependencyOverrides ++= jettyOverrides,
+    // dependencyOverrides ++= jettyOverrides,
 
     parallelExecution in Test := false,
     fork in Test := false,
@@ -64,32 +63,6 @@ lazy val microservice = Project(appName, file("."))
     unitTestSettings,
     integrationTestSettings,
     componentTestSettings)
-
-val jettyVersion = "9.2.24.v20180105"
-// we need to override the akka version for now as newer versions are not compatible with reactivemongo
-lazy val akkaVersion = "2.5.23"
-lazy val akkaHttpVersion = "10.0.15"
-val jettyOverrides: Seq[ModuleID] = Seq(
-  "org.eclipse.jetty" % "jetty-server" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-servlet" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-security" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-servlets" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-continuation" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-webapp" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-xml" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-client" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-http" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-io" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-util" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty.websocket" % "websocket-api" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty.websocket" % "websocket-common" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty.websocket" % "websocket-client" % jettyVersion % IntegrationTest,
-  "com.typesafe.akka" %% "akka-stream" % akkaVersion,
-  "com.typesafe.akka" %% "akka-protobuf" % akkaVersion,
-  "com.typesafe.akka" %% "akka-slf4j" % akkaVersion,
-  "com.typesafe.akka" %% "akka-actor" % akkaVersion,
-  "com.typesafe.akka" %% "akka-http-core" % akkaHttpVersion
-)
 
 lazy val unitTestSettings =
   inConfig(Test)(Defaults.testTasks) ++

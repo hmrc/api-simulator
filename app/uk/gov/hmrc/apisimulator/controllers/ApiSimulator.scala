@@ -21,15 +21,15 @@ import javax.inject.Inject
 import org.apache.commons.io.FileUtils
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, AnyContent, BodyParser, BodyParsers, ControllerComponents, Result}
+import play.api.mvc._
 import uk.gov.hmrc.apisimulator.domain.Hello
 import uk.gov.hmrc.apisimulator.services._
 import uk.gov.hmrc.apisimulator.util.{BodyParsersUtils, TimeUtils}
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel}
 import uk.gov.hmrc.domain.Nino
-import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 trait ApiSimulator extends BackendController with HeaderValidator with BodyParsersUtils with AuthorisedFunctions {
 
@@ -90,7 +90,7 @@ trait ApiSimulator extends BackendController with HeaderValidator with BodyParse
     Future(Ok(Json.toJson(Hello("Hello UTR"))))
   }
 
-  final def post: Action[JsValue] = Action.async(BodyParsers.parse.json) { implicit request =>
+  final def post: Action[JsValue] = Action.async(parse.json) { implicit request =>
     if (acceptHeaderValidationRules(request.headers.get(ACCEPT))) {
       Future(Ok(Json.toJson(Hello("Hello User"))))
     }

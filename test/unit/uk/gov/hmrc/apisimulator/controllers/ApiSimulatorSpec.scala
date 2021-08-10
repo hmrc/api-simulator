@@ -22,7 +22,6 @@ import akka.stream.Materializer
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
 import play.api.mvc.Result
 import play.api.test.{FakeRequest, StubControllerComponentsFactory}
 import play.mvc.Http.Status.{OK, UNAUTHORIZED}
@@ -36,6 +35,7 @@ import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.successful
+import org.scalatestplus.mockito.MockitoSugar
 
 class ApiSimulatorSpec extends UnitSpec with WithFakeApplication with MockitoSugar {
 
