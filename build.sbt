@@ -12,7 +12,6 @@ lazy val appName = "api-simulator"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test
 
 lazy val compile = Seq(
-  "org.apache.commons"  %  "commons-io"                       % "1.3.2",
   "uk.gov.hmrc"         %% "bootstrap-backend-play-26"        % "5.10.0",
   "uk.gov.hmrc"         %% "domain"                           % "5.6.0-play-26",
   "com.typesafe.play"   %% "play-iteratees"                   % "2.6.1",

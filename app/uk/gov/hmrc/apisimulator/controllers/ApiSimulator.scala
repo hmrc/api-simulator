@@ -29,7 +29,7 @@ import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLeve
 import uk.gov.hmrc.domain.Nino
 
 import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.play.bootstrap.controller.BackendController
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 trait ApiSimulator extends BackendController with HeaderValidator with BodyParsersUtils with AuthorisedFunctions {
 
