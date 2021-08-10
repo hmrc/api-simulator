@@ -12,24 +12,24 @@ lazy val appName = "api-simulator"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test
 
 lazy val compile = Seq(
-  "org.apache.commons" % "commons-io" % "1.3.2",
-  "uk.gov.hmrc" %% "bootstrap-backend-play-26" % "5.7.0",
-  "uk.gov.hmrc" %% "domain" % "5.6.0-play-26",
-  "com.typesafe.play" %% "play-iteratees" % "2.6.1",
-  "com.typesafe.play" %% "play-iteratees-reactive-streams" % "2.6.1"
+  "org.apache.commons"  %  "commons-io"                       % "1.3.2",
+  "uk.gov.hmrc"         %% "bootstrap-backend-play-26"        % "5.10.0",
+  "uk.gov.hmrc"         %% "domain"                           % "5.6.0-play-26",
+  "com.typesafe.play"   %% "play-iteratees"                   % "2.6.1",
+  "com.typesafe.play"   %% "play-iteratees-reactive-streams"  % "2.6.1"
 )
 
 lazy val test = Seq(
-  "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % "test,it",
-  "org.scalaj" %% "scalaj-http" % "2.3.0" % "test,it",
-  "org.pegdown" % "pegdown" % "1.6.0" % "test,it",
-  "com.typesafe.play" %% "play-test" % PlayVersion.current % "test,it",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3" % "test,it",
-  "org.mockito" % "mockito-core" % "2.12.0" % "test,it",
-  "com.github.tomakehurst" % "wiremock-jre8-standalone" % "2.27.2" % "test,it",
-  "info.cukes" %% "cucumber-scala" % "1.2.5" % "test,it",
-  "info.cukes" % "cucumber-junit" % "1.2.5" % "test,it"
-)
+  "uk.gov.hmrc"             %% "hmrctest"                     % "3.9.0-play-26",
+  "org.scalaj"              %% "scalaj-http"                  % "2.3.0",
+  "org.pegdown"             %  "pegdown"                      % "1.6.0",
+  "com.typesafe.play"       %% "play-test"                    % PlayVersion.current,
+  "org.scalatestplus.play"  %% "scalatestplus-play"           % "3.1.3",
+  "org.mockito"             %  "mockito-core"                 % "2.12.0",
+  "com.github.tomakehurst"  %  "wiremock-jre8-standalone"     % "2.27.2",
+  "info.cukes"              %% "cucumber-scala"               % "1.2.5",
+  "info.cukes"              %  "cucumber-junit"               % "1.2.5"
+).map(_ % "test, it")
 
 lazy val IntegrationTest = config("it") extend Test
 lazy val ComponentTest = config("component") extend Test
