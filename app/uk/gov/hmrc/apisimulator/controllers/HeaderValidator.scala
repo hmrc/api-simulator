@@ -19,7 +19,6 @@ package uk.gov.hmrc.apisimulator.controllers
 import play.api.http.HeaderNames.ACCEPT
 import play.api.libs.json.Json
 import play.api.mvc._
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.matching.Regex
 import scala.util.matching.Regex.Match

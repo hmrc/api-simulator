@@ -5,26 +5,27 @@ import _root_.play.sbt.routes.RoutesKeys.routesGenerator
 import sbt.Keys._
 import sbt.Tests.{Group, SubProcess}
 import sbt._
+import scoverage.ScoverageKeys
 import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 
 lazy val appName = "api-simulator"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test
+lazy val bootstrapVersion = "5.14.0"
 
 lazy val compile = Seq(
-  "uk.gov.hmrc"         %% "bootstrap-backend-play-26"        % "5.10.0",
-  "uk.gov.hmrc"         %% "domain"                           % "5.6.0-play-26",
+  "uk.gov.hmrc"         %% "bootstrap-backend-play-28"  %  bootstrapVersion,
+
+  "uk.gov.hmrc"         %% "domain"                           % "6.2.0-play-28",
   "com.typesafe.play"   %% "play-iteratees"                   % "2.6.1",
   "com.typesafe.play"   %% "play-iteratees-reactive-streams"  % "2.6.1"
 )
 
 lazy val test = Seq(
-  "uk.gov.hmrc"             %% "hmrctest"                     % "3.9.0-play-26",
+  "uk.gov.hmrc"             %% "bootstrap-test-play-28"       % bootstrapVersion,
   "org.scalaj"              %% "scalaj-http"                  % "2.3.0",
+  "org.mockito"             %% "mockito-scala-scalatest"    % "1.14.8",
   "org.pegdown"             %  "pegdown"                      % "1.6.0",
-  "com.typesafe.play"       %% "play-test"                    % PlayVersion.current,
-  "org.scalatestplus.play"  %% "scalatestplus-play"           % "3.1.3",
-  "org.mockito"             %  "mockito-core"                 % "2.12.0",
   "com.github.tomakehurst"  %  "wiremock-jre8-standalone"     % "2.27.2",
   "info.cukes"              %% "cucumber-scala"               % "1.2.5",
   "info.cukes"              %  "cucumber-junit"               % "1.2.5"
@@ -34,7 +35,7 @@ lazy val IntegrationTest = config("it") extend Test
 lazy val ComponentTest = config("component") extend Test
 val testConfig = Seq(ComponentTest, IntegrationTest, Test)
 
-lazy val plugins: Seq[Plugins] = Seq(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory)
+lazy val plugins: Seq[Plugins] = Seq(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin)
 lazy val playSettings: Seq[Setting[_]] = Seq(routesImport ++= Seq("uk.gov.hmrc.apisimulator.controllers._", "uk.gov.hmrc.domain._"))
 
 lazy val microservice = Project(appName, file("."))
@@ -98,4 +99,7 @@ def onPackageName(rootPackage: String): String => Boolean = {
 // Coverage configuration
 coverageMinimum := 20
 coverageFailOnMinimum := true
-coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;app.*;uk.gov.hmrc.BuildInfo"
+coverageExcludedPackages := """<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;app.*;uk.gov.hmrc.BuildInfo;.*\.Routes;.*\.RoutesPrefix;.*Filters?;MicroserviceAuditConnector;Module;GraphiteStartUp;.*\.Reverse[^.]*"""
+
+
+

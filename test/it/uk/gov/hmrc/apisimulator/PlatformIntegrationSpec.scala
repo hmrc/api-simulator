@@ -19,16 +19,20 @@ package it.uk.gov.hmrc.apisimulator
 import akka.stream.Materializer
 import controllers.AssetsMetadata
 import org.scalatest.concurrent.ScalaFutures
-import play.api.http.LazyHttpErrorHandler
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+import play.api.http.DefaultHttpErrorHandler
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
+import play.api.test.Helpers._
 import play.api.test.{FakeRequest, StubControllerComponentsFactory}
 import play.api.{Application, Mode}
 import play.mvc.Http.Status.OK
 import uk.gov.hmrc.apisimulator.controllers.Documentation
-import uk.gov.hmrc.play.test.UnitSpec
-import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+
+import scala.concurrent.Future
 
 /**
   * Testcase to verify the capability of integration with the API platform.
@@ -39,7 +43,8 @@ import org.scalatestplus.play.guice.GuiceOneServerPerSuite
   *
   * See: "API Platform Architecture with Flows" on Confluence.
   */
-class PlatformIntegrationSpec extends UnitSpec with ScalaFutures with GuiceOneServerPerSuite with StubControllerComponentsFactory {
+class PlatformIntegrationSpec extends AnyWordSpec with Matchers with ScalaFutures
+  with GuiceOneServerPerSuite with StubControllerComponentsFactory {
 
   override def fakeApplication(): Application = GuiceApplicationBuilder()
     .configure("run.mode" -> "Stub")
@@ -51,7 +56,7 @@ class PlatformIntegrationSpec extends UnitSpec with ScalaFutures with GuiceOneSe
   trait Setup {
     implicit val mat: Materializer = app.materializer
     val meta = app.injector.instanceOf[AssetsMetadata]
-    val documentationController = new Documentation(LazyHttpErrorHandler, stubControllerComponents(), meta) {}
+    val documentationController = new Documentation(DefaultHttpErrorHandler, stubControllerComponents(), meta) {}
     val request = FakeRequest()
   }
 
@@ -62,8 +67,10 @@ class PlatformIntegrationSpec extends UnitSpec with ScalaFutures with GuiceOneSe
     }
 
     "provide RAML conf endpoint and RAML for each version" in new Setup {
-      val definitionResult: Result = await(documentationController.definition()(request))
-      val definitionResponse: JsValue = jsonBodyOf(definitionResult)
+      val definitionResult: Future[Result] = documentationController.definition()(request)
+      val bodyString: String = contentAsString(definitionResult)
+      val definitionResponse: JsValue =  Json.parse(bodyString)
+
       val versions: Seq[String] = (definitionResponse \\ "version") map (_.as[String])
 
       versions.foreach { version =>
