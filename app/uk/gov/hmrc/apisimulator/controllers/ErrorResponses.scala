@@ -32,7 +32,7 @@ object ErrorResponse{
 
 
 case object ErrorUnauthorized extends ErrorResponse(401, "UNAUTHORIZED", "Bearer token is missing or not authorized") {
-  implicit val implicitFooWrites = new Writes[ErrorUnauthorized.type] {
+  implicit val implicitwrites = new Writes[ErrorUnauthorized.type] {
     override def writes(error: ErrorUnauthorized.type): JsValue = {
       ErrorResponse.writes(error)
     }
@@ -40,7 +40,7 @@ case object ErrorUnauthorized extends ErrorResponse(401, "UNAUTHORIZED", "Bearer
 }
 
 case object ErrorNotFound extends ErrorResponse(404, "NOT_FOUND", "Resource was not found"){
-  implicit val implicitFooWrites = new Writes[ErrorNotFound.type] {
+  implicit val implicitwrites = new Writes[ErrorNotFound.type] {
     override def writes(error: ErrorNotFound.type): JsValue = {
       ErrorResponse.writes(error)
     }
@@ -48,7 +48,7 @@ case object ErrorNotFound extends ErrorResponse(404, "NOT_FOUND", "Resource was 
 }
 
 case object ErrorGenericBadRequest extends ErrorResponse(400, "BAD_REQUEST", "Bad Request"){
-  implicit val writes = new Writes[ErrorGenericBadRequest.type] {
+  implicit val implicitwrites = new Writes[ErrorGenericBadRequest.type] {
     override def writes(error: ErrorGenericBadRequest.type): JsValue = {
       ErrorResponse.writes(error)
     }
@@ -56,7 +56,7 @@ case object ErrorGenericBadRequest extends ErrorResponse(400, "BAD_REQUEST", "Ba
 }
 
 case object ErrorAcceptHeaderInvalid extends ErrorResponse(406, "ACCEPT_HEADER_INVALID", "The accept header is missing or invalid"){
-  implicit val writes = new Writes[ErrorAcceptHeaderInvalid.type] {
+  implicit val implicitwrites = new Writes[ErrorAcceptHeaderInvalid.type] {
     override def writes(error: ErrorAcceptHeaderInvalid.type): JsValue = {
       ErrorResponse.writes(error)
     }
@@ -64,7 +64,7 @@ case object ErrorAcceptHeaderInvalid extends ErrorResponse(406, "ACCEPT_HEADER_I
 }
 
 case object ErrorInternalServerError extends ErrorResponse(500, "INTERNAL_SERVER_ERROR", "Internal server error"){
-  implicit val writes = new Writes[ErrorInternalServerError.type] {
+  implicit val implicitwrites = new Writes[ErrorInternalServerError.type] {
     override def writes(error: ErrorInternalServerError.type): JsValue = {
       ErrorResponse.writes(error)
     }
