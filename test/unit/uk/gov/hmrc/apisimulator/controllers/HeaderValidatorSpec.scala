@@ -16,11 +16,13 @@
 
 package unit.uk.gov.hmrc.apisimulator.controllers
 
-import org.scalatest.Matchers
-import uk.gov.hmrc.apisimulator.controllers.HeaderValidator
-import uk.gov.hmrc.play.test.UnitSpec
 
-class HeaderValidatorSpec extends UnitSpec with Matchers with HeaderValidator{
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import uk.gov.hmrc.apisimulator.controllers.HeaderValidator
+
+
+class HeaderValidatorSpec extends AnyWordSpec with Matchers with HeaderValidator{
 
   "acceptHeaderValidationRules" should {
     "return false when the header value is missing" in {

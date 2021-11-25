@@ -16,16 +16,40 @@
 
 package unit.uk.gov.hmrc.apisimulator.controllers
 
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.Json
-import uk.gov.hmrc.apisimulator.controllers.ErrorAcceptHeaderInvalid
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.apisimulator.controllers._
 
-class ErrorResponseSpec extends UnitSpec with Matchers{
+class ErrorResponseSpec extends AnyWordSpec with Matchers{
+
   "errorResponse" should {
-    "be translated to error Json with only the required fields" in {
+    "ErrorUnauthorized be translated to error Json with only the required fields" in {
+      Json.toJson(ErrorUnauthorized).toString() shouldBe
+        """{"code":"UNAUTHORIZED","message":"Bearer token is missing or not authorized"}"""
+    }
+
+    "ErrorAcceptHeaderInvalid be translated to error Json with only the required fields" in {
       Json.toJson(ErrorAcceptHeaderInvalid).toString() shouldBe
         """{"code":"ACCEPT_HEADER_INVALID","message":"The accept header is missing or invalid"}"""
+    }
+
+
+    "ErrorNotFound be translated to error Json with only the required fields" in {
+      Json.toJson(ErrorNotFound).toString() shouldBe
+        """{"code":"NOT_FOUND","message":"Resource was not found"}"""
+    }
+
+
+    "ErrorGenericBadRequest be translated to error Json with only the required fields" in {
+      Json.toJson(ErrorGenericBadRequest).toString() shouldBe
+        """{"code":"BAD_REQUEST","message":"Bad Request"}"""
+    }
+
+
+    "ErrorInternalServerError be translated to error Json with only the required fields" in {
+      Json.toJson(ErrorInternalServerError).toString() shouldBe
+        """{"code":"INTERNAL_SERVER_ERROR","message":"Internal server error"}"""
     }
   }
 

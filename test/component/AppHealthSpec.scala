@@ -16,14 +16,17 @@
 
 package component
 
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.http.Status.OK
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.WSClient
+import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import play.api.{Application, Mode}
-import uk.gov.hmrc.play.test.UnitSpec
 
-class AppHealthSpec extends UnitSpec with GuiceOneServerPerSuite{
+
+class AppHealthSpec extends AnyWordSpec  with Matchers  with FutureAwaits with DefaultAwaitTimeout with  GuiceOneServerPerSuite{
 
 
   override def fakeApplication(): Application = GuiceApplicationBuilder()

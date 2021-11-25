@@ -17,23 +17,25 @@
 package uk.gov.hmrc.apisimulator.controllers
 
 import com.google.inject.Singleton
+
 import javax.inject.Inject
 import org.apache.commons.io.FileUtils
-import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 import uk.gov.hmrc.apisimulator.domain.Hello
 import uk.gov.hmrc.apisimulator.services._
-import uk.gov.hmrc.apisimulator.util.{BodyParsersUtils, TimeUtils}
+import uk.gov.hmrc.apisimulator.util.{ApplicationLogger, BodyParsersUtils, TimeUtils}
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel}
 import uk.gov.hmrc.domain.Nino
 
 import scala.concurrent.{ExecutionContext, Future}
+import controllers._
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
-trait ApiSimulator extends BackendController with HeaderValidator with BodyParsersUtils with AuthorisedFunctions {
+trait ApiSimulator extends BackendController with HeaderValidator with BodyParsersUtils with AuthorisedFunctions with ApplicationLogger {
 
   def service: ApiSimulatorService
+
 
   final def userApiWithLatency(latency: Int): Action[AnyContent] = (Action andThen validateAccept(acceptHeaderValidationRules)).async { implicit request =>
     service.userApiWithLatency(latency).map(as => Ok(Json.toJson(as))
@@ -50,7 +52,7 @@ trait ApiSimulator extends BackendController with HeaderValidator with BodyParse
   }
 
   final def world: Action[AnyContent] = Action.async { implicit request =>
-    Logger.info("Headers: " + request.headers)
+    logger.info("Headers: " + request.headers)
     service.world.map(as => Ok(Json.toJson(as))
     ) recover {
       case _ => Status(ErrorInternalServerError.httpStatusCode)(Json.toJson(ErrorInternalServerError))
@@ -58,7 +60,7 @@ trait ApiSimulator extends BackendController with HeaderValidator with BodyParse
   }
 
   final def application: Action[AnyContent] = Action.async { implicit request =>
-    Logger.info("Headers: " + request.headers)
+    logger.info("Headers: " + request.headers)
     service.application.map(as => Ok(Json.toJson(as))
     ) recover {
       case _ => Status(ErrorInternalServerError.httpStatusCode)(Json.toJson(ErrorInternalServerError))
@@ -66,7 +68,7 @@ trait ApiSimulator extends BackendController with HeaderValidator with BodyParse
   }
 
   final def user: Action[AnyContent] = Action.async { implicit request =>
-    Logger.info("Headers: " + request.headers)
+    logger.info("Headers: " + request.headers)
     service.user.map(as => Ok(Json.toJson(as))
     ) recover {
       case _ => Status(ErrorInternalServerError.httpStatusCode)(Json.toJson(ErrorInternalServerError))
@@ -78,7 +80,7 @@ trait ApiSimulator extends BackendController with HeaderValidator with BodyParse
   }
 
   final def handleNino(nino: Nino): Future[Result] = {
-    Logger.info(s"Request for nino $nino")
+    logger.info(s"Request for nino $nino")
     Future(Ok(Json.toJson(Hello("Hello Nino"))))
   }
 
@@ -105,7 +107,7 @@ trait ApiSimulator extends BackendController with HeaderValidator with BodyParse
       if (acceptHeaderValidationRules(request.headers.get(ACCEPT))) {
         val endTime = System.currentTimeMillis()
         val msg = s"Total of ${FileUtils.byteCountToDisplaySize(request.body)} read in ${TimeUtils.formatTimeDifference(beginTime, endTime)}"
-        Logger.info(s"ApiSimulator#postProcessBytes(): $msg")
+        logger.info(s"ApiSimulator#postProcessBytes(): $msg")
         Future(Ok(msg))
       }
       else {

@@ -16,14 +16,15 @@
 
 package unit.uk.gov.hmrc.apisimulator.util
 
-import org.scalatest.Matchers
+
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import uk.gov.hmrc.apisimulator.controllers.HeaderValidator
 import uk.gov.hmrc.apisimulator.util.StringUtils
-import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.util.Random
 
-class StringUtilsSpec extends UnitSpec with Matchers with HeaderValidator{
+class StringUtilsSpec extends AnyWordSpec with Matchers with HeaderValidator{
 
   // Note that this method is not efficient for large strings
   private def generateStringSlowly(numberOfChars: Int): String = {
