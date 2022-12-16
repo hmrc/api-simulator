@@ -9,7 +9,7 @@
     <logger name="org.asynchttpclient.netty.channel.DefaultChannelPool" level="INFO"/>
     <logger name="io.netty" level="INFO"/>
 
-    <root level="${logger.application:-INFO}">
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>
