@@ -5,18 +5,19 @@ import _root_.play.sbt.routes.RoutesKeys.routesGenerator
 import sbt.Keys._
 import sbt.Tests.{Group, SubProcess}
 import sbt._
-import scoverage.ScoverageKeys
+import scoverage.ScoverageKeys._
 import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 
 lazy val appName = "api-simulator"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test
-lazy val bootstrapVersion = "5.14.0"
+lazy val bootstrapVersion = "7.12.0"
 
 lazy val compile = Seq(
   "uk.gov.hmrc"         %% "bootstrap-backend-play-28"  %  bootstrapVersion,
 
-  "uk.gov.hmrc"         %% "domain"                           % "6.2.0-play-28",
+  "uk.gov.hmrc"         %% "domain"                           % "8.1.0-play-28",
+  "commons-io"          % "commons-io"                        % "2.11.0",
   "com.typesafe.play"   %% "play-iteratees"                   % "2.6.1",
   "com.typesafe.play"   %% "play-iteratees-reactive-streams"  % "2.6.1"
 )
@@ -52,12 +53,12 @@ lazy val microservice = Project(appName, file("."))
     libraryDependencies ++= appDependencies,
     // dependencyOverrides ++= jettyOverrides,
 
-    parallelExecution in Test := false,
-    fork in Test := false,
+    Test / parallelExecution  := false,
+    Test / fork := false,
     retrieveManaged := true
   )
   .settings(
-    unmanagedResourceDirectories in Compile += baseDirectory.value / "resources"
+    Compile / unmanagedResourceDirectories += baseDirectory.value / "resources"
   )
   .settings(
     unitTestSettings,
@@ -67,28 +68,28 @@ lazy val microservice = Project(appName, file("."))
 lazy val unitTestSettings =
   inConfig(Test)(Defaults.testTasks) ++
     Seq(
-      testOptions in Test := Seq(Tests.Filter(onPackageName("unit"))),
-      testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oD"),
-      unmanagedSourceDirectories in Test := Seq((baseDirectory in Test).value / "test"),
+      Test / testOptions := Seq(Tests.Filter(onPackageName("unit"))),
+      Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD"),
+      Test / unmanagedSourceDirectories := Seq((Test / baseDirectory).value / "test"),
       addTestReportOption(Test, "test-reports")
     )
 
 lazy val integrationTestSettings =
   inConfig(IntegrationTest)(Defaults.testTasks) ++
     Seq(
-      testOptions in IntegrationTest := Seq(Tests.Filter(onPackageName("it"))),
-      testOptions in IntegrationTest += Tests.Argument(TestFrameworks.ScalaTest, "-oD"),
-      fork in IntegrationTest := false,
-      parallelExecution in IntegrationTest := false,
+      IntegrationTest / testOptions := Seq(Tests.Filter(onPackageName("it"))),
+      IntegrationTest / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD"),
+      IntegrationTest / fork := false,
+      IntegrationTest / parallelExecution  := false,
       addTestReportOption(IntegrationTest, "it-reports"))
 
 lazy val componentTestSettings =
   inConfig(ComponentTest)(Defaults.testTasks) ++
     Seq(
-      testOptions in ComponentTest := Seq(Tests.Filter(onPackageName("component"))),
-      testOptions in ComponentTest += Tests.Argument(TestFrameworks.ScalaTest, "-oD"),
-      fork in ComponentTest := false,
-      parallelExecution in ComponentTest := false,
+      ComponentTest / testOptions := Seq(Tests.Filter(onPackageName("component"))),
+      ComponentTest / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD"),
+      ComponentTest / fork := false,
+      ComponentTest / parallelExecution := false,
       addTestReportOption(ComponentTest, "component-reports")
     )
 

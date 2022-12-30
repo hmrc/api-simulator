@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package uk.gov.hmrc.apisimulator.controllers
 import com.google.inject.Singleton
 
 import javax.inject.Inject
-import org.apache.commons.io.FileUtils
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 import uk.gov.hmrc.apisimulator.domain.Hello
@@ -30,6 +29,7 @@ import uk.gov.hmrc.domain.Nino
 
 import scala.concurrent.{ExecutionContext, Future}
 import controllers._
+import org.apache.commons.io.FileUtils
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 trait ApiSimulator extends BackendController with HeaderValidator with BodyParsersUtils with AuthorisedFunctions with ApplicationLogger {
