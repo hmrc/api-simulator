@@ -18,7 +18,9 @@ package unit.uk.gov.hmrc.apisimulator.controllers
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+
 import play.api.libs.json.Json
+
 import uk.gov.hmrc.apisimulator.controllers._
 
 class ErrorResponseSpec extends AnyWordSpec with Matchers {

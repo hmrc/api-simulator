@@ -16,12 +16,13 @@
 
 package unit.uk.gov.hmrc.apisimulator.util
 
+import scala.util.Random
+
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+
 import uk.gov.hmrc.apisimulator.controllers.HeaderValidator
 import uk.gov.hmrc.apisimulator.util.StringUtils
-
-import scala.util.Random
 
 class StringUtilsSpec extends AnyWordSpec with Matchers with HeaderValidator {
 
@@ -35,24 +36,21 @@ class StringUtilsSpec extends AnyWordSpec with Matchers with HeaderValidator {
 
       val size: Int = Int.MaxValue / 1000
 
-      var time1, time2: Long = 0
-      var str: String        = ""
-
       // using Apache Commons IO (fast implementation)
-      time1 = System.currentTimeMillis()
-      str = StringUtils.generateRandomString(size)
-      time2 = System.currentTimeMillis()
-      str.length shouldBe size
+      val time1 = System.currentTimeMillis()
+      val str1  = StringUtils.generateRandomString(size)
+      val time2 = System.currentTimeMillis()
+      str1.length shouldBe size
 
       val execTime1 = time2 - time1
 
       // using Scala (slow implementation)
-      time1 = System.currentTimeMillis()
-      str = generateStringSlowly(size)
-      time2 = System.currentTimeMillis()
-      str.length shouldBe size
+      val time3 = System.currentTimeMillis()
+      val str2  = generateStringSlowly(size)
+      val time4 = System.currentTimeMillis()
+      str2.length shouldBe size
 
-      val execTime2 = time2 - time1
+      val execTime2 = time4 - time3
 
       execTime1 shouldBe <(execTime2)
     }

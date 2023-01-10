@@ -16,12 +16,15 @@
 
 package it.uk.gov.hmrc.apisimulator
 
+import scala.concurrent.Future
+
 import akka.stream.Materializer
 import controllers.AssetsMetadata
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+
 import play.api.http.DefaultHttpErrorHandler
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
@@ -30,9 +33,8 @@ import play.api.test.Helpers._
 import play.api.test.{FakeRequest, StubControllerComponentsFactory}
 import play.api.{Application, Mode}
 import play.mvc.Http.Status.OK
-import uk.gov.hmrc.apisimulator.controllers.Documentation
 
-import scala.concurrent.Future
+import uk.gov.hmrc.apisimulator.controllers.Documentation
 
 /** Testcase to verify the capability of integration with the API platform.
   *

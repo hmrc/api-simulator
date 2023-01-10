@@ -16,9 +16,11 @@
 
 package uk.gov.hmrc.apisimulator.controllers
 
+import javax.inject.Inject
+
 import com.google.inject.Singleton
 import controllers.{AssetsBuilder, AssetsMetadata}
-import javax.inject.Inject
+
 import play.api.http.HttpErrorHandler
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 

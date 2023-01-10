@@ -16,21 +16,21 @@
 
 package uk.gov.hmrc.apisimulator.controllers
 
-import com.google.inject.Singleton
-
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
+
+import com.google.inject.Singleton
+import org.apache.commons.io.FileUtils
+
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel}
+import uk.gov.hmrc.domain.Nino
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+
 import uk.gov.hmrc.apisimulator.domain.Hello
 import uk.gov.hmrc.apisimulator.services._
 import uk.gov.hmrc.apisimulator.util.{ApplicationLogger, BodyParsersUtils, TimeUtils}
-import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, ConfidenceLevel}
-import uk.gov.hmrc.domain.Nino
-
-import scala.concurrent.{ExecutionContext, Future}
-import controllers._
-import org.apache.commons.io.FileUtils
-import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 trait ApiSimulator extends BackendController with HeaderValidator with BodyParsersUtils with AuthorisedFunctions with ApplicationLogger {
 

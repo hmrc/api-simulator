@@ -16,14 +16,16 @@
 
 package uk.gov.hmrc.apisimulator.services
 
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
+
 import akka.actor.ActorSystem
 import com.google.inject.Singleton
-import javax.inject.Inject
-import uk.gov.hmrc.apisimulator.domain.Hello
-import uk.gov.hmrc.apisimulator.util.StringUtils
+
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.apisimulator.domain.Hello
+import uk.gov.hmrc.apisimulator.util.StringUtils
 
 trait ApiSimulatorService {
   def userApiWithLatency(latency: Int)(implicit hc: HeaderCarrier): Future[Hello]

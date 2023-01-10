@@ -19,8 +19,9 @@ package uk.gov.hmrc.apisimulator
 import play.api.libs.json.{JsValue, Json, Writes}
 import play.api.mvc.Result
 import play.api.mvc.Results.Unauthorized
-import uk.gov.hmrc.apisimulator.config.{Binders, SaUtrBinder}
 import uk.gov.hmrc.auth.core.AuthorisationException
+
+import uk.gov.hmrc.apisimulator.config.{Binders, SaUtrBinder}
 
 package object controllers {
 

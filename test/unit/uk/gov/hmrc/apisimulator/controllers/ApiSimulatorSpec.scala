@@ -16,37 +16,39 @@
 
 package unit.uk.gov.hmrc.apisimulator.controllers
 
+import java.util.UUID
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.concurrent.Future.successful
+
 import akka.stream.Materializer
 import org.mockito.ArgumentMatchers
 import org.mockito.scalatest.MockitoSugar
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import play.api.test.{FakeRequest, StubControllerComponentsFactory}
 import play.mvc.Http.Status.{OK, UNAUTHORIZED}
-import uk.gov.hmrc.apisimulator.controllers.{AuthLiveController, IVLiveController}
-import uk.gov.hmrc.apisimulator.services.LiveService
 import uk.gov.hmrc.auth.core.retrieve.EmptyRetrieval
 import uk.gov.hmrc.auth.core.{AuthConnector, InsufficientConfidenceLevel}
 import uk.gov.hmrc.domain.{Generator, Nino, SaUtr}
 
-import java.util.UUID
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.concurrent.Future.successful
+import uk.gov.hmrc.apisimulator.controllers.{AuthLiveController, IVLiveController}
+import uk.gov.hmrc.apisimulator.services.LiveService
 
 class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite
     with MockitoSugar {
 
   trait Setup {
-    implicit val mat: Materializer                  = fakeApplication.materializer
-    val nino: Nino                                  = new Generator().nextNino
-    val utr: SaUtr                                  = SaUtr(UUID.randomUUID.toString)
-    val fakeRequest                                 = FakeRequest().withHeaders("Accept" -> "application/vnd.hmrc.1.0+json")
-    val mockAuthConnector: AuthConnector            = mock[AuthConnector]
+    implicit val mat: Materializer       = fakeApplication.materializer
+    val nino: Nino                       = new Generator().nextNino
+    val utr: SaUtr                       = SaUtr(UUID.randomUUID.toString)
+    val fakeRequest                      = FakeRequest().withHeaders("Accept" -> "application/vnd.hmrc.1.0+json")
+    val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
     def jsonBodyOf(result: Future[Result]): JsValue = {
       val bodyString = contentAsString(result)
