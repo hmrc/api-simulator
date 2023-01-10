@@ -19,5 +19,5 @@ package uk.gov.hmrc.apisimulator.util
 import play.api.Logger
 
 trait ApplicationLogger {
- val logger = Logger("application")
+  val logger = Logger("application")
 }

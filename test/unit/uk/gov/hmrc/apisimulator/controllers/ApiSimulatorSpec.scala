@@ -38,17 +38,17 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.Future.successful
 
-
 class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite
-  with MockitoSugar {
+    with MockitoSugar {
 
   trait Setup {
-    implicit val mat: Materializer = fakeApplication.materializer
-    val nino: Nino = new Generator().nextNino
-    val utr: SaUtr = SaUtr(UUID.randomUUID.toString)
-    val fakeRequest = FakeRequest().withHeaders("Accept" -> "application/vnd.hmrc.1.0+json")
-    val mockAuthConnector: AuthConnector = mock[AuthConnector]
-    def jsonBodyOf(result: Future[Result]): JsValue ={
+    implicit val mat: Materializer                  = fakeApplication.materializer
+    val nino: Nino                                  = new Generator().nextNino
+    val utr: SaUtr                                  = SaUtr(UUID.randomUUID.toString)
+    val fakeRequest                                 = FakeRequest().withHeaders("Accept" -> "application/vnd.hmrc.1.0+json")
+    val mockAuthConnector: AuthConnector            = mock[AuthConnector]
+
+    def jsonBodyOf(result: Future[Result]): JsValue = {
       val bodyString = contentAsString(result)
       Json.parse(bodyString)
     }
@@ -76,7 +76,7 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
       "return 401 if the user does not have a sufficient confidence level" in new AuthLiveSetup {
         when(mockAuthConnector.authorise(*, ArgumentMatchers.eq(EmptyRetrieval))(*, *)).thenReturn(Future.failed(InsufficientConfidenceLevel()))
 
-        val result: Future[Result]= underTest.nino(nino)(fakeRequest)
+        val result: Future[Result] = underTest.nino(nino)(fakeRequest)
 
         status(result) shouldBe UNAUTHORIZED
         (jsonBodyOf(result) \ "message").as[String] shouldBe "Bearer token is missing or not authorized"
@@ -87,7 +87,7 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
       "return a successful response" in new AuthLiveSetup {
         when(mockAuthConnector.authorise(*, ArgumentMatchers.eq(EmptyRetrieval))(*, *)).thenReturn(successful(()))
 
-        val result: Future[Result]= underTest.utr(utr)(fakeRequest)
+        val result: Future[Result] = underTest.utr(utr)(fakeRequest)
 
         status(result) shouldBe OK
         (jsonBodyOf(result) \ "message").as[String] shouldBe "Hello UTR"
@@ -96,7 +96,7 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
       "return 401 if the user does not have a sufficient confidence level" in new AuthLiveSetup {
         when(mockAuthConnector.authorise(*, ArgumentMatchers.eq(EmptyRetrieval))(*, *)).thenReturn(Future.failed(InsufficientConfidenceLevel()))
 
-        val result: Future[Result]= underTest.utr(utr)(fakeRequest)
+        val result: Future[Result] = underTest.utr(utr)(fakeRequest)
 
         status(result) shouldBe UNAUTHORIZED
         (jsonBodyOf(result) \ "message").as[String] shouldBe "Bearer token is missing or not authorized"
@@ -109,7 +109,7 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
       "return a successful response" in new IVLiveSetup {
         when(mockAuthConnector.authorise(*, ArgumentMatchers.eq(EmptyRetrieval))(*, *)).thenReturn(successful(()))
 
-        val result: Future[Result]= underTest.nino(nino)(fakeRequest)
+        val result: Future[Result] = underTest.nino(nino)(fakeRequest)
 
         status(result) shouldBe OK
         (jsonBodyOf(result) \ "message").as[String] shouldBe "Hello Nino"
@@ -118,7 +118,7 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
       "return 401 if the user does not have a sufficient confidence level" in new IVLiveSetup {
         when(mockAuthConnector.authorise(*, ArgumentMatchers.eq(EmptyRetrieval))(*, *)).thenReturn(Future.failed(InsufficientConfidenceLevel()))
 
-        val result: Future[Result]= underTest.nino(nino)(fakeRequest)
+        val result: Future[Result] = underTest.nino(nino)(fakeRequest)
 
         status(result) shouldBe UNAUTHORIZED
         (jsonBodyOf(result) \ "message").as[String] shouldBe "Bearer token is missing or not authorized"
@@ -129,7 +129,7 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
       "return a successful response" in new IVLiveSetup {
         when(mockAuthConnector.authorise(*, ArgumentMatchers.eq(EmptyRetrieval))(*, *)).thenReturn(successful(()))
 
-        val result: Future[Result]= underTest.utr(utr)(fakeRequest)
+        val result: Future[Result] = underTest.utr(utr)(fakeRequest)
 
         status(result) shouldBe OK
         (jsonBodyOf(result) \ "message").as[String] shouldBe "Hello UTR"

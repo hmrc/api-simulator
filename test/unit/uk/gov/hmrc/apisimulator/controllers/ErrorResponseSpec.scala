@@ -21,7 +21,7 @@ import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.Json
 import uk.gov.hmrc.apisimulator.controllers._
 
-class ErrorResponseSpec extends AnyWordSpec with Matchers{
+class ErrorResponseSpec extends AnyWordSpec with Matchers {
 
   "errorResponse" should {
     "ErrorUnauthorized be translated to error Json with only the required fields" in {
@@ -34,18 +34,15 @@ class ErrorResponseSpec extends AnyWordSpec with Matchers{
         """{"code":"ACCEPT_HEADER_INVALID","message":"The accept header is missing or invalid"}"""
     }
 
-
     "ErrorNotFound be translated to error Json with only the required fields" in {
       Json.toJson(ErrorNotFound).toString() shouldBe
         """{"code":"NOT_FOUND","message":"Resource was not found"}"""
     }
 
-
     "ErrorGenericBadRequest be translated to error Json with only the required fields" in {
       Json.toJson(ErrorGenericBadRequest).toString() shouldBe
         """{"code":"BAD_REQUEST","message":"Bad Request"}"""
     }
-
 
     "ErrorInternalServerError be translated to error Json with only the required fields" in {
       Json.toJson(ErrorInternalServerError).toString() shouldBe

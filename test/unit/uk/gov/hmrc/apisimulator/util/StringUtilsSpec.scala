@@ -16,7 +16,6 @@
 
 package unit.uk.gov.hmrc.apisimulator.util
 
-
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import uk.gov.hmrc.apisimulator.controllers.HeaderValidator
@@ -24,7 +23,7 @@ import uk.gov.hmrc.apisimulator.util.StringUtils
 
 import scala.util.Random
 
-class StringUtilsSpec extends AnyWordSpec with Matchers with HeaderValidator{
+class StringUtilsSpec extends AnyWordSpec with Matchers with HeaderValidator {
 
   // Note that this method is not efficient for large strings
   private def generateStringSlowly(numberOfChars: Int): String = {
@@ -37,7 +36,7 @@ class StringUtilsSpec extends AnyWordSpec with Matchers with HeaderValidator{
       val size: Int = Int.MaxValue / 1000
 
       var time1, time2: Long = 0
-      var str: String = ""
+      var str: String        = ""
 
       // using Apache Commons IO (fast implementation)
       time1 = System.currentTimeMillis()
@@ -55,7 +54,7 @@ class StringUtilsSpec extends AnyWordSpec with Matchers with HeaderValidator{
 
       val execTime2 = time2 - time1
 
-      execTime1 shouldBe < (execTime2)
+      execTime1 shouldBe <(execTime2)
     }
   }
 }

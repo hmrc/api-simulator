@@ -28,7 +28,7 @@ trait BodyParsersUtils {
   implicit def ec: ExecutionContext
 
   val bytesConsumer: BodyParser[Long] = BodyParser { req =>
-    val sink = Sink.fold(0L)( (u,t: ByteString) => u + t.length)
+    val sink = Sink.fold(0L)((u, t: ByteString) => u + t.length)
     Accumulator(sink).map(Right.apply)
 
   }

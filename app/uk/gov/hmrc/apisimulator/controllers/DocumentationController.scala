@@ -23,7 +23,7 @@ import play.api.http.HttpErrorHandler
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 
 @Singleton
-class Documentation @Inject()(httpErrorHandler: HttpErrorHandler, cc: ControllerComponents, meta: AssetsMetadata) extends AssetsBuilder(httpErrorHandler, meta) {
+class Documentation @Inject() (httpErrorHandler: HttpErrorHandler, cc: ControllerComponents, meta: AssetsMetadata) extends AssetsBuilder(httpErrorHandler, meta) {
 
   def definition(): Action[AnyContent] = {
     super.at(s"/public/api", "definition.json")

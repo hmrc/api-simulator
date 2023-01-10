@@ -28,7 +28,6 @@ import scala.concurrent.{ExecutionContext, Future}
 trait ApiSimulatorService {
   def userApiWithLatency(latency: Int)(implicit hc: HeaderCarrier): Future[Hello]
 
-
   def userApiWithData(data: Int)(implicit hc: HeaderCarrier): Future[Hello]
 
   def world(implicit hc: HeaderCarrier): Future[Hello]
@@ -66,6 +65,7 @@ class LiveService @Inject() (system: ActorSystem)(implicit val ec: ExecutionCont
 
 @Singleton
 class SandboxService extends ApiSimulatorService {
+
   override def userApiWithLatency(latencyInMs: Int)(implicit hc: HeaderCarrier): Future[Hello] = {
     Thread.sleep(latencyInMs)
     Future.successful(Hello("Hello Sandbox User"))

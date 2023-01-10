@@ -29,12 +29,13 @@ trait HeaderValidator extends Results {
 
   val validateContentType: String => Boolean = _ == "json"
 
-  val matchHeader: String => Option[Match] = new Regex( """^application/vnd[.]{1}hmrc[.]{1}(.*?)[+]{1}(.*)$""", "version", "contenttype") findFirstMatchIn _
+  val matchHeader: String => Option[Match] = new Regex("""^application/vnd[.]{1}hmrc[.]{1}(.*?)[+]{1}(.*)$""", "version", "contenttype") findFirstMatchIn _
 
   val acceptHeaderValidationRules: Option[String] => Boolean =
     _ flatMap (a => matchHeader(a) map (res => validateContentType(res.group("contenttype")) && validateVersion(res.group("version")))) getOrElse false
 
   def validateAccept(rules: Option[String] => Boolean)(implicit ec: ExecutionContext) = new ActionFilter[Request] {
+
     override protected def filter[A](request: Request[A]): Future[Option[Result]] = Future.successful {
       if (rules(request.headers.get(ACCEPT))) {
         None

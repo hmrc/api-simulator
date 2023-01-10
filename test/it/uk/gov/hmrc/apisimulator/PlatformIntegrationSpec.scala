@@ -34,30 +34,30 @@ import uk.gov.hmrc.apisimulator.controllers.Documentation
 
 import scala.concurrent.Future
 
-/**
-  * Testcase to verify the capability of integration with the API platform.
+/** Testcase to verify the capability of integration with the API platform.
   *
-  * To expose API's to Third Party Developers, the service needs to define the APIs in a definition.json and make it available under api/definition GET endpoint.
-  * For all of the endpoints defined in the definition.json a documentation.xml needs to be provided and be available under api/documentation/[version]/[endpoint name] GET endpoint.
-  * Example: api/documentation/1.0/Fetch-Some-Data
+  * To expose API's to Third Party Developers, the service needs to define the APIs in a definition.json and make it available under api/definition GET endpoint. For all of the
+  * endpoints defined in the definition.json a documentation.xml needs to be provided and be available under api/documentation/[version]/[endpoint name] GET endpoint. Example:
+  * api/documentation/1.0/Fetch-Some-Data
   *
   * See: "API Platform Architecture with Flows" on Confluence.
   */
 class PlatformIntegrationSpec extends AnyWordSpec with Matchers with ScalaFutures
-  with GuiceOneServerPerSuite with StubControllerComponentsFactory {
+    with GuiceOneServerPerSuite with StubControllerComponentsFactory {
 
   override def fakeApplication(): Application = GuiceApplicationBuilder()
     .configure("run.mode" -> "Stub")
     .configure(Map(
       "appName" -> "application-name",
-      "appUrl" -> "http://microservice-name.example.com"))
+      "appUrl"  -> "http://microservice-name.example.com"
+    ))
     .in(Mode.Test).build()
 
   trait Setup {
     implicit val mat: Materializer = app.materializer
-    val meta = app.injector.instanceOf[AssetsMetadata]
-    val documentationController = new Documentation(DefaultHttpErrorHandler, stubControllerComponents(), meta) {}
-    val request = FakeRequest()
+    val meta                       = app.injector.instanceOf[AssetsMetadata]
+    val documentationController    = new Documentation(DefaultHttpErrorHandler, stubControllerComponents(), meta) {}
+    val request                    = FakeRequest()
   }
 
   "microservice" should {
@@ -68,8 +68,8 @@ class PlatformIntegrationSpec extends AnyWordSpec with Matchers with ScalaFuture
 
     "provide RAML conf endpoint and RAML for each version" in new Setup {
       val definitionResult: Future[Result] = documentationController.definition()(request)
-      val bodyString: String = contentAsString(definitionResult)
-      val definitionResponse: JsValue =  Json.parse(bodyString)
+      val bodyString: String               = contentAsString(definitionResult)
+      val definitionResponse: JsValue      = Json.parse(bodyString)
 
       val versions: Seq[String] = (definitionResponse \\ "version") map (_.as[String])
 

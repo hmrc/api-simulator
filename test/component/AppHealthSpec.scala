@@ -25,9 +25,7 @@ import play.api.libs.ws.WSClient
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import play.api.{Application, Mode}
 
-
-class AppHealthSpec extends AnyWordSpec  with Matchers  with FutureAwaits with DefaultAwaitTimeout with  GuiceOneServerPerSuite{
-
+class AppHealthSpec extends AnyWordSpec with Matchers with FutureAwaits with DefaultAwaitTimeout with GuiceOneServerPerSuite {
 
   override def fakeApplication(): Application = GuiceApplicationBuilder()
     .in(Mode.Test).build()

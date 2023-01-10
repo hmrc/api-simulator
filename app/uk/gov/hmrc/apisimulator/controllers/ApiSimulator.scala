@@ -36,41 +36,35 @@ trait ApiSimulator extends BackendController with HeaderValidator with BodyParse
 
   def service: ApiSimulatorService
 
-
   final def userApiWithLatency(latency: Int): Action[AnyContent] = (Action andThen validateAccept(acceptHeaderValidationRules)).async { implicit request =>
-    service.userApiWithLatency(latency).map(as => Ok(Json.toJson(as))
-    ) recover {
+    service.userApiWithLatency(latency).map(as => Ok(Json.toJson(as))) recover {
       case _ => Status(ErrorInternalServerError.httpStatusCode)(Json.toJson(ErrorInternalServerError))
     }
   }
 
   final def userApiWithData(data: Int): Action[AnyContent] = (Action andThen validateAccept(acceptHeaderValidationRules)).async { implicit request =>
-    service.userApiWithData(data).map(as => Ok(Json.toJson(as))
-    ) recover {
+    service.userApiWithData(data).map(as => Ok(Json.toJson(as))) recover {
       case _ => Status(ErrorInternalServerError.httpStatusCode)(Json.toJson(ErrorInternalServerError))
     }
   }
 
   final def world: Action[AnyContent] = Action.async { implicit request =>
     logger.info("Headers: " + request.headers)
-    service.world.map(as => Ok(Json.toJson(as))
-    ) recover {
+    service.world.map(as => Ok(Json.toJson(as))) recover {
       case _ => Status(ErrorInternalServerError.httpStatusCode)(Json.toJson(ErrorInternalServerError))
     }
   }
 
   final def application: Action[AnyContent] = Action.async { implicit request =>
     logger.info("Headers: " + request.headers)
-    service.application.map(as => Ok(Json.toJson(as))
-    ) recover {
+    service.application.map(as => Ok(Json.toJson(as))) recover {
       case _ => Status(ErrorInternalServerError.httpStatusCode)(Json.toJson(ErrorInternalServerError))
     }
   }
 
   final def user: Action[AnyContent] = Action.async { implicit request =>
     logger.info("Headers: " + request.headers)
-    service.user.map(as => Ok(Json.toJson(as))
-    ) recover {
+    service.user.map(as => Ok(Json.toJson(as))) recover {
       case _ => Status(ErrorInternalServerError.httpStatusCode)(Json.toJson(ErrorInternalServerError))
     }
   }
@@ -95,8 +89,7 @@ trait ApiSimulator extends BackendController with HeaderValidator with BodyParse
   final def post: Action[JsValue] = Action.async(parse.json) { implicit request =>
     if (acceptHeaderValidationRules(request.headers.get(ACCEPT))) {
       Future(Ok(Json.toJson(Hello("Hello User"))))
-    }
-    else {
+    } else {
       Future.successful(Status(ErrorAcceptHeaderInvalid.httpStatusCode)(Json.toJson(ErrorAcceptHeaderInvalid)))
     }
   }
@@ -106,11 +99,10 @@ trait ApiSimulator extends BackendController with HeaderValidator with BodyParse
     Action.async(bytesConsumer) { implicit request =>
       if (acceptHeaderValidationRules(request.headers.get(ACCEPT))) {
         val endTime = System.currentTimeMillis()
-        val msg = s"Total of ${FileUtils.byteCountToDisplaySize(request.body)} read in ${TimeUtils.formatTimeDifference(beginTime, endTime)}"
+        val msg     = s"Total of ${FileUtils.byteCountToDisplaySize(request.body)} read in ${TimeUtils.formatTimeDifference(beginTime, endTime)}"
         logger.info(s"ApiSimulator#postProcessBytes(): $msg")
         Future(Ok(msg))
-      }
-      else {
+      } else {
         Future.successful(Status(ErrorAcceptHeaderInvalid.httpStatusCode)(Json.toJson(ErrorAcceptHeaderInvalid)))
       }
     }
@@ -119,8 +111,7 @@ trait ApiSimulator extends BackendController with HeaderValidator with BodyParse
   final def put: Action[AnyContent] = Action.async { implicit request =>
     if (acceptHeaderValidationRules(request.headers.get(ACCEPT))) {
       Future(Ok(Json.toJson(Hello("Hello User"))))
-    }
-    else {
+    } else {
       Future.successful(Status(ErrorAcceptHeaderInvalid.httpStatusCode)(Json.toJson(ErrorAcceptHeaderInvalid)))
     }
   }
@@ -128,16 +119,24 @@ trait ApiSimulator extends BackendController with HeaderValidator with BodyParse
 }
 
 @Singleton
-class SandboxController @Inject()(override val service: SandboxService, override val authConnector: AuthConnector, cc: ControllerComponents)
-                                 (implicit override val ec: ExecutionContext) extends BackendController(cc) with ApiSimulator
+class SandboxController @Inject() (
+    override val service: SandboxService,
+    override val authConnector: AuthConnector,
+    cc: ControllerComponents
+  )(implicit override val ec: ExecutionContext
+  ) extends BackendController(cc) with ApiSimulator
 
 @Singleton
-class LiveController @Inject()(override val service: LiveService, override val authConnector: AuthConnector, cc: ControllerComponents)
-                              (implicit override val ec: ExecutionContext)  extends BackendController(cc) with ApiSimulator
+class LiveController @Inject() (override val service: LiveService, override val authConnector: AuthConnector, cc: ControllerComponents)(implicit override val ec: ExecutionContext)
+    extends BackendController(cc) with ApiSimulator
 
 @Singleton
-class AuthLiveController @Inject() (override val service: LiveService, override val authConnector: AuthConnector, cc: ControllerComponents)
-                                   (implicit override val ec: ExecutionContext) extends BackendController(cc) with ApiSimulator {
+class AuthLiveController @Inject() (
+    override val service: LiveService,
+    override val authConnector: AuthConnector,
+    cc: ControllerComponents
+  )(implicit override val ec: ExecutionContext
+  ) extends BackendController(cc) with ApiSimulator {
 
   final override def nino(nino: Nino): Action[AnyContent] = (Action andThen validateAccept(acceptHeaderValidationRules)).async { implicit request =>
     authorised(ConfidenceLevel.L50) {
@@ -153,9 +152,8 @@ class AuthLiveController @Inject() (override val service: LiveService, override 
 }
 
 @Singleton
-class IVLiveController @Inject()(override val service: LiveService, override val authConnector: AuthConnector, cc: ControllerComponents)
-                                (implicit val ec: ExecutionContext) extends BackendController(cc) with ApiSimulator {
-
+class IVLiveController @Inject() (override val service: LiveService, override val authConnector: AuthConnector, cc: ControllerComponents)(implicit val ec: ExecutionContext)
+    extends BackendController(cc) with ApiSimulator {
 
   final override def nino(nino: Nino): Action[AnyContent] = (Action andThen validateAccept(acceptHeaderValidationRules)).async { implicit request =>
     authorised(ConfidenceLevel.L200) {
