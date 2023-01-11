@@ -5,7 +5,6 @@ import _root_.play.sbt.routes.RoutesKeys.routesGenerator
 import sbt.Keys._
 import sbt.Tests.{Group, SubProcess}
 import sbt._
-import scoverage.ScoverageKeys._
 import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 
@@ -61,7 +60,6 @@ lazy val microservice = Project(appName, file("."))
     scalaVersion := "2.12.12",
     majorVersion := 0,
     libraryDependencies ++= appDependencies,
-    // dependencyOverrides ++= jettyOverrides,
 
     Test / parallelExecution  := false,
     Test / fork := false,
@@ -74,6 +72,7 @@ lazy val microservice = Project(appName, file("."))
     unitTestSettings,
     integrationTestSettings,
     componentTestSettings)
+  .settings(ScoverageSettings())
 
 lazy val unitTestSettings =
   inConfig(Test)(Defaults.testTasks) ++
@@ -106,11 +105,6 @@ lazy val componentTestSettings =
 def onPackageName(rootPackage: String): String => Boolean = {
   testName => testName startsWith rootPackage
 }
-
-// Coverage configuration
-coverageMinimum := 20
-coverageFailOnMinimum := true
-coverageExcludedPackages := """<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;app.*;uk.gov.hmrc.BuildInfo;.*\.Routes;.*\.RoutesPrefix;.*Filters?;MicroserviceAuditConnector;Module;GraphiteStartUp;.*\.Reverse[^.]*"""
 
 
 
