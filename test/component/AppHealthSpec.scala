@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,14 @@ package component
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+
 import play.api.http.Status.OK
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.WSClient
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import play.api.{Application, Mode}
 
-
-class AppHealthSpec extends AnyWordSpec  with Matchers  with FutureAwaits with DefaultAwaitTimeout with  GuiceOneServerPerSuite{
-
+class AppHealthSpec extends AnyWordSpec with Matchers with FutureAwaits with DefaultAwaitTimeout with GuiceOneServerPerSuite {
 
   override def fakeApplication(): Application = GuiceApplicationBuilder()
     .in(Mode.Test).build()

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,12 @@
 
 package unit.uk.gov.hmrc.apisimulator.controllers
 
-
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+
 import uk.gov.hmrc.apisimulator.controllers.HeaderValidator
 
-
-class HeaderValidatorSpec extends AnyWordSpec with Matchers with HeaderValidator{
+class HeaderValidatorSpec extends AnyWordSpec with Matchers with HeaderValidator {
 
   "acceptHeaderValidationRules" should {
     "return false when the header value is missing" in {
@@ -60,4 +59,3 @@ class HeaderValidatorSpec extends AnyWordSpec with Matchers with HeaderValidator
     }
   }
 }
-

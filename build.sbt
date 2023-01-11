@@ -13,6 +13,17 @@ lazy val appName = "api-simulator"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test
 lazy val bootstrapVersion = "7.12.0"
 
+ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
+
+inThisBuild(
+  List(
+    scalaVersion := "2.12.12",
+    semanticdbEnabled := true,
+    semanticdbVersion := scalafixSemanticdb.revision
+  )
+)
+
+
 lazy val compile = Seq(
   "uk.gov.hmrc"         %% "bootstrap-backend-play-28"  %  bootstrapVersion,
 
@@ -47,7 +58,6 @@ lazy val microservice = Project(appName, file("."))
   .settings(defaultSettings(): _*)
   .configs(testConfig: _*)
   .settings(
-    targetJvm := "jvm-1.8",
     scalaVersion := "2.12.12",
     majorVersion := 0,
     libraryDependencies ++= appDependencies,

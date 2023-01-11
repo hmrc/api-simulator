@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
 
 package uk.gov.hmrc.apisimulator.controllers
 
-import play.api.http.HeaderNames.ACCEPT
-import play.api.libs.json.Json
-import play.api.mvc._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.matching.Regex
 import scala.util.matching.Regex.Match
+
+import play.api.http.HeaderNames.ACCEPT
+import play.api.libs.json.Json
+import play.api.mvc._
 
 trait HeaderValidator extends Results {
 
@@ -29,12 +30,13 @@ trait HeaderValidator extends Results {
 
   val validateContentType: String => Boolean = _ == "json"
 
-  val matchHeader: String => Option[Match] = new Regex( """^application/vnd[.]{1}hmrc[.]{1}(.*?)[+]{1}(.*)$""", "version", "contenttype") findFirstMatchIn _
+  val matchHeader: String => Option[Match] = new Regex("""^application/vnd[.]{1}hmrc[.]{1}(.*?)[+]{1}(.*)$""", "version", "contenttype") findFirstMatchIn _
 
   val acceptHeaderValidationRules: Option[String] => Boolean =
     _ flatMap (a => matchHeader(a) map (res => validateContentType(res.group("contenttype")) && validateVersion(res.group("version")))) getOrElse false
 
   def validateAccept(rules: Option[String] => Boolean)(implicit ec: ExecutionContext) = new ActionFilter[Request] {
+
     override protected def filter[A](request: Request[A]): Future[Option[Result]] = Future.successful {
       if (rules(request.headers.get(ACCEPT))) {
         None

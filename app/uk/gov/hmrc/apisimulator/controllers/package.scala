@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,16 @@ package uk.gov.hmrc.apisimulator
 import play.api.libs.json.{JsValue, Json, Writes}
 import play.api.mvc.Result
 import play.api.mvc.Results.Unauthorized
-import uk.gov.hmrc.apisimulator.config.{Binders, SaUtrBinder}
 import uk.gov.hmrc.auth.core.AuthorisationException
+
+import uk.gov.hmrc.apisimulator.config.{Binders, SaUtrBinder}
 
 package object controllers {
 
   implicit val errorResponseWrites = new Writes[ErrorResponse] {
     def writes(e: ErrorResponse): JsValue = Json.obj("code" -> e.errorCode, "message" -> e.message)
   }
-  implicit val ninoBinder = Binders
+  implicit val ninoBinder          = Binders
 
   implicit val utrBinder = SaUtrBinder
 
