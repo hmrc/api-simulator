@@ -44,7 +44,7 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
     with MockitoSugar {
 
   trait Setup {
-    implicit val mat: Materializer       = fakeApplication.materializer
+    implicit val mat: Materializer       = fakeApplication().materializer
     val nino: Nino                       = new Generator().nextNino
     val utr: SaUtr                       = SaUtr(UUID.randomUUID.toString)
     val fakeRequest                      = FakeRequest().withHeaders("Accept" -> "application/vnd.hmrc.1.0+json")

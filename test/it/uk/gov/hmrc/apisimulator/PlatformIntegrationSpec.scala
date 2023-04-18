@@ -73,7 +73,7 @@ class PlatformIntegrationSpec extends AnyWordSpec with Matchers with ScalaFuture
       val bodyString: String               = contentAsString(definitionResult)
       val definitionResponse: JsValue      = Json.parse(bodyString)
 
-      val versions: Seq[String] = (definitionResponse \\ "version") map (_.as[String])
+      val versions: Seq[String] = (definitionResponse \\ "version").map(_.as[String]).toSeq
 
       versions.foreach { version =>
         val result = documentationController.conf(version, "application.raml")(request)
