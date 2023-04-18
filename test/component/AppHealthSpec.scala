@@ -35,7 +35,7 @@ class AppHealthSpec extends AnyWordSpec with Matchers with FutureAwaits with Def
     "the health check endpoint is called" should {
       "respond with 200 OK" in {
         val wsClient = app.injector.instanceOf[WSClient]
-        val response = await(wsClient.url(s"http://localhost:$port/ping/ping").get)
+        val response = await(wsClient.url(s"http://localhost:$port/ping/ping").get())
         response.status shouldBe OK
       }
     }
