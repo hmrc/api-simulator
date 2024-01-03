@@ -28,7 +28,7 @@ package object controllers {
   implicit val errorResponseWrites: Writes[ErrorResponse] = new Writes[ErrorResponse] {
     def writes(e: ErrorResponse): JsValue = Json.obj("code" -> e.errorCode, "message" -> e.message)
   }
-  implicit val ninoBinder: Binders.type    = Binders
+  implicit val ninoBinder: Binders.type                   = Binders
 
   implicit val utrBinder: SaUtrBinder.type = SaUtrBinder
 
