@@ -16,10 +16,10 @@
 
 package uk.gov.hmrc.apisimulator.domain
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class Hello(message: String)
 
 object Hello {
-  implicit val format = Json.format[Hello]
+  implicit val format: OFormat[Hello] = Json.format[Hello]
 }

@@ -25,12 +25,12 @@ import uk.gov.hmrc.apisimulator.config.{Binders, SaUtrBinder}
 
 package object controllers {
 
-  implicit val errorResponseWrites = new Writes[ErrorResponse] {
+  implicit val errorResponseWrites: Writes[ErrorResponse] = new Writes[ErrorResponse] {
     def writes(e: ErrorResponse): JsValue = Json.obj("code" -> e.errorCode, "message" -> e.message)
   }
-  implicit val ninoBinder          = Binders
+  implicit val ninoBinder: Binders.type    = Binders
 
-  implicit val utrBinder = SaUtrBinder
+  implicit val utrBinder: SaUtrBinder.type = SaUtrBinder
 
   def recovery: PartialFunction[Throwable, Result] = {
     case e: AuthorisationException => Unauthorized(Json.toJson(ErrorUnauthorized))
