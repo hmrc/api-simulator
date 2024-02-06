@@ -18,8 +18,8 @@ package it.uk.gov.hmrc.apisimulator
 
 import scala.concurrent.Future
 
-import akka.stream.Materializer
 import controllers.AssetsMetadata
+import org.apache.pekko.stream.Materializer
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec

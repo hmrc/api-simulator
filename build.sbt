@@ -1,9 +1,5 @@
-import _root_.play.core.PlayVersion
-import _root_.play.sbt.PlayImport._
 import _root_.play.sbt.PlayScala
-import _root_.play.sbt.routes.RoutesKeys.routesGenerator
 import sbt.Keys._
-import sbt.Tests.{Group, SubProcess}
 import sbt._
 import uk.gov.hmrc.DefaultBuildSettings._
 
@@ -19,11 +15,10 @@ lazy val IntegrationTest = config("it") extend Test
 lazy val ComponentTest = config("component") extend Test
 val testConfig = Seq(ComponentTest, IntegrationTest, Test)
 
-lazy val plugins: Seq[Plugins] = Seq(PlayScala, SbtDistributablesPlugin)
 lazy val playSettings: Seq[Setting[_]] = Seq(routesImport ++= Seq("uk.gov.hmrc.apisimulator.controllers._", "uk.gov.hmrc.domain._"))
 
 lazy val microservice = Project(appName, file("."))
-  .enablePlugins(plugins: _*)
+  .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(playSettings: _*)
   .settings(scalaSettings: _*)
@@ -36,7 +31,8 @@ lazy val microservice = Project(appName, file("."))
 
     Test / parallelExecution  := false,
     Test / fork := false,
-    retrieveManaged := true
+    retrieveManaged := true,
+    scalacOptions += "-Wconf:src=routes/.*:s"
   )
   .settings(
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources"
@@ -94,4 +90,4 @@ commands ++= Seq(
 
   // Coverage does not need compile !
   Command.command("pre-commit") { state => "clean" :: "scalafmtAll" :: "scalafixAll" :: "coverage" :: "run-all-tests" :: "coverageOff" :: "coverageAggregate" :: state }
-)  
+)

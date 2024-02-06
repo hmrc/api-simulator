@@ -19,8 +19,9 @@ package uk.gov.hmrc.apisimulator.services
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-import akka.actor.ActorSystem
 import com.google.inject.Singleton
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.pattern
 
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -45,7 +46,7 @@ class LiveService @Inject() (system: ActorSystem)(implicit val ec: ExecutionCont
 
   override def userApiWithLatency(latencyInMs: Int)(implicit hc: HeaderCarrier): Future[Hello] = {
     val delay: FiniteDuration = latencyInMs.millis
-    akka.pattern.after[Hello](delay, system.scheduler)(Future.successful(Hello("Hello User")))
+    pattern.after[Hello](delay, system.scheduler)(Future.successful(Hello("Hello User")))
   }
 
   override def userApiWithData(data: Int)(implicit hc: HeaderCarrier): Future[Hello] = {
