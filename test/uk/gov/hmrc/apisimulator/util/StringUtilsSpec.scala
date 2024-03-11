@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apisimulator.util
+package uk.gov.hmrc.apisimulator.util
 
 import scala.util.Random
 

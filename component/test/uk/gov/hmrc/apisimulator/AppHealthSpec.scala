@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package component
+package uk.gov.hmrc.apisimulator
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec

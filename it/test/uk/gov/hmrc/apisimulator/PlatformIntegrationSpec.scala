@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package it.uk.gov.hmrc.apisimulator
+package uk.gov.hmrc.apisimulator
 
 import scala.concurrent.Future
 
-import controllers.AssetsMetadata
+import _root_.controllers.AssetsMetadata
 import org.apache.pekko.stream.Materializer
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.matchers.should.Matchers

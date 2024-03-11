@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.apisimulator.controllers
+package uk.gov.hmrc.apisimulator.controllers
 
 import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
