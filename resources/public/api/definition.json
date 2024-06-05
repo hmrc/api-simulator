@@ -17,12 +17,6 @@
       "name": "Performance Tests 250",
       "description": "Performance tests confidenceLevel 200",
       "confidenceLevel": 250
-    },
-    {
-      "key": "read:performance-tests-500",
-      "name": "Performance Tests 500",
-      "description": "Performance tests confidenceLevel 300",
-      "confidenceLevel": 500
     }
   ],
   "api": {
