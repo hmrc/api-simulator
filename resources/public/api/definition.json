@@ -15,7 +15,7 @@
     {
       "key": "read:performance-tests-250",
       "name": "Performance Tests 250",
-      "description": "Performance tests confidenceLevel 200",
+      "description": "Performance tests confidenceLevel 250",
       "confidenceLevel": 250
     }
   ],
