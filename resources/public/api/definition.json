@@ -25,10 +25,6 @@
     "context": "api-simulator",
     "versions": [
       {
-        "version": "1.0",
-        "status": "RETIRED"
-      },
-      {
         "version": "2.0",
         "access" : {
           "type" : "PRIVATE",
