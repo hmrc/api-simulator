@@ -26,11 +26,11 @@ import play.api.mvc._
 
 trait HeaderValidator extends Results {
 
-  val validateVersion: String => Boolean = _ == "1.0"
+  val validateVersion: String => Boolean = List("1.0", "2.0").contains
 
   val validateContentType: String => Boolean = _ == "json"
 
-  val matchHeader: String => Option[Match] = new Regex("""^application/vnd[.]{1}hmrc[.]{1}(.*?)[+]{1}(.*)$""", "version", "contenttype") findFirstMatchIn _
+  val matchHeader: String => Option[Match] = new Regex("""^application/vnd\.hmrc\.(.*?)\+(.*)$""", "version", "contenttype") findFirstMatchIn _
 
   val acceptHeaderValidationRules: Option[String] => Boolean =
     _ flatMap (a => matchHeader(a) map (res => validateContentType(res.group("contenttype")) && validateVersion(res.group("version")))) getOrElse false
