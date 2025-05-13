@@ -1,0 +1,258 @@
+openapi: "3.0.3"
+
+info:
+  version: "1.0"
+  title: API Simulator
+  description: |
+    # Overview
+
+    An 'api simulator' to do performance tests on the API Platform.
+servers:
+- url: https://test-api.service.hmrc.gov.uk
+  description: Sandbox
+- url: https://api.service.hmrc.gov.uk/
+  description: Production
+
+components:
+  parameters:
+    acceptHeader:
+      name: Accept
+      in: header
+      schema:
+        type: string
+        enum: [
+          "application/vnd.hmrc.1.0+json"
+        ]
+      required: true
+    contentTypeHeader:
+      name: Content-Type
+      in: header
+      schema:
+        type: string
+        enum: [
+          "application/json",
+          "application/hal+json"
+        ]
+      required: true
+  securitySchemes:
+    applicationRestricted:
+      type: oauth2
+      description: |
+        HMRC supports OAuth 2.0 for authenticating application restricted API requests using an OAuth 2.0 Bearer Token in the AUTHORIZATION header.
+        See https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/application-restricted-endpoints for details.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.service.hmrc.gov.uk/oauth/token
+          scopes: {}
+    userRestricted:
+      type: oauth2
+      description: HMRC supports OAuth 2.0 for authenticating User-restricted API requests
+      flows: 
+        authorizationCode:
+          authorizationUrl: https://api.service.hmrc.gov.uk/oauth/authorize
+          tokenUrl: https://api.service.hmrc.gov.uk/oauth/token
+          refreshUrl: https://api.service.hmrc.gov.uk/oauth/refresh
+          scopes:
+            read:performancee-tests: Performance tests
+
+paths:
+  /api-simulator/world:
+    get:
+      summary: Open API with Get
+      description: |
+        A simple example for integrating with an unrestricted service.
+        Any request to this open-endpoint initiates a 'Hello World' response.
+      tags:
+        - api-simulator
+      parameters:
+        - $ref: '#/components/parameters/acceptHeader'
+        - $ref: '#/components/parameters/contentTypeHeader'
+      responses:
+        200:
+          description: "OK Response"
+          content:
+            application/json:
+              example:
+                $ref: "./examples/open-api-with-get-example-1.json"
+      security:
+        - {}
+
+  /api-simulator/application:
+    get:
+      summary: Application API with Get
+      description: A simple application-restricted endpoint that allows GET requests.
+      tags:
+        - api-simulator
+      parameters:
+        - $ref: '#/components/parameters/acceptHeader'
+        - $ref: '#/components/parameters/contentTypeHeader'
+      responses:
+        200:
+          description: "OK Response"
+          content:
+            application/json:
+              example:
+                $ref: "./examples/application-api-with-get-example-1.json"
+      security:
+        - applicationRestricted: []
+
+  /api-simulator/user:
+    get:
+      summary: User API with Get
+      description: A simple user-restricted endpoint that allows GET requests.
+      tags:
+        - api-simulator
+      parameters:
+        - $ref: '#/components/parameters/acceptHeader'
+        - $ref: '#/components/parameters/contentTypeHeader'
+      responses:
+        200:
+          description: "OK Response"
+          content:
+            application/json:
+              example:
+                $ref: "./examples/user-api-with-get-example-1.json"
+      security:
+        - userRestricted:
+          - read:performance-tests
+
+    post:
+      summary: User API with Post
+      description: A simple user endpoint that allows POST requests.
+      tags:
+        - api-simulator
+      parameters:
+        - $ref: '#/components/parameters/acceptHeader'
+        - $ref: '#/components/parameters/contentTypeHeader'
+      responses:
+        200:
+          description: "OK Response"
+          content:
+            application/json:
+              example:
+                $ref: "./examples/user-api-with-post-example-1.json"
+      security:
+        - userRestricted:
+          - read:performance-tests
+
+    put:
+      summary: User API with Put
+      description: A simple user endpoint that allows PUT requests.
+      tags:
+        - api-simulator
+      parameters:
+        - $ref: '#/components/parameters/acceptHeader'
+        - $ref: '#/components/parameters/contentTypeHeader'
+      responses:
+        200:
+          description: "OK Response"
+          content:
+            application/json:
+              example:
+                $ref: "./examples/user-api-with-put-example-1.json"
+      security:
+        - userRestricted:
+          - read:performance-tests
+
+  /api-simulator/user/data/{data}:
+    get:
+      summary: User API with data
+      description: A simple user endpoint that return configurable amounts of data.
+      tags:
+        - api-simulator
+      parameters:
+        - $ref: '#/components/parameters/acceptHeader'
+        - name: data
+          in: path
+          description: The number of characters to return in the response.
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 1073741823
+      responses:
+        200:
+          description: "OK Response"
+          content:
+            application/json:
+              example:
+                $ref: "./examples/user-api-with-data-example-1.json"
+      security:
+        - userRestricted:
+          - read:performance-tests
+
+  /api-simulator/user/latency/{latency}:
+    get:
+      summary: User API with latency
+      description: A simple user endpoint that return with a configurable latency.
+      tags:
+        - api-simulator
+      parameters:
+        - $ref: '#/components/parameters/acceptHeader'
+        - name: latency
+          in: path
+          description: The latency of the service to respond in milliseconds.
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 1073741823
+      responses:
+        200:
+          description: "OK Response"
+          content:
+            application/json:
+              example:
+                $ref: "./examples/user-api-with-latency-example-1.json"
+      security:
+        - userRestricted:
+          - read:performance-tests
+
+  /api-simulator/user/processBytes:
+    post:
+      summary: User API with upload bytes
+      description: A simple user endpoint that sends any content (file included).
+      tags:
+        - api-simulator
+      parameters:
+        - $ref: '#/components/parameters/acceptHeader'
+        - $ref: '#/components/parameters/contentTypeHeader'
+      responses:
+        200:
+          description: "OK Response"
+          content:
+            application/json:
+              example:
+                $ref: "./examples/user-api-with-upload-bytes-example-1.json"
+      security:
+        - userRestricted:
+          - read:performance-tests
+
+  /api-simulator/sa/{utr}/login:
+    get:
+      summary: SA API with auth filter CL50
+      description: A simple user endpoint with an Auth Filter around the UTR requiring confidence level of 50
+      tags:
+        - api-simulator
+      parameters:
+        - $ref: '#/components/parameters/acceptHeader'
+        - $ref: '#/components/parameters/contentTypeHeader'
+        - name: utr
+          in: path
+          description: User's UTR
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 1073741823
+      responses:
+        200:
+          description: "OK Response"
+          content:
+            application/json:
+              example:
+                $ref: "./examples/sa-api-with-auth-filter-cl50-example-1.json"
+      security:
+        - userRestricted:
+          - read:performance-tests
+
