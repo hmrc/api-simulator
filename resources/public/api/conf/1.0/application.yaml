@@ -256,3 +256,29 @@ paths:
         - userRestricted:
           - read:performance-tests
 
+  /api-simulator/paye/{nino}/login:
+    get:
+      summary: PAYE API with auth filter CL50
+      description: A simple user endpoint with an Auth Filter around the NINO requiring confidence level of 50
+      tags:
+        - api-simulator
+      parameters:
+        - $ref: '#/components/parameters/acceptHeader'
+        - $ref: '#/components/parameters/contentTypeHeader'
+        - name: utr
+          in: path
+          description: Users NINO
+          required: true
+          schema:
+            type: string
+            example: AA111111B
+      responses:
+        200:
+          description: "OK Response"
+          content:
+            application/json:
+              example:
+                $ref: "./examples/paye-api-with-auth-filter-cl50-example-1.json"
+      security:
+        - userRestricted:
+          - read:performance-tests
