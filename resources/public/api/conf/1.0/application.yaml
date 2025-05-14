@@ -239,7 +239,7 @@ paths:
         - $ref: '#/components/parameters/contentTypeHeader'
         - name: utr
           in: path
-          description: User's UTR
+          description: Users UTR
           required: true
           schema:
             type: integer
@@ -252,6 +252,34 @@ paths:
             application/json:
               example:
                 $ref: "./examples/sa-api-with-auth-filter-cl50-example-1.json"
+      security:
+        - userRestricted:
+          - read:performance-tests
+
+  /api-simulator/sa/{utr}/iv:
+    get:
+      summary: SA API with auth filter CL200
+      description: A simple user endpoint with an Auth Filter around the UTR requiring confidence level of 200
+      tags:
+        - api-simulator
+      parameters:
+        - $ref: '#/components/parameters/acceptHeader'
+        - $ref: '#/components/parameters/contentTypeHeader'
+        - name: utr
+          in: path
+          description: Users UTR
+          required: true
+          schema:
+            type: integer
+            format: int32
+            example: 1073741823
+      responses:
+        200:
+          description: "OK Response"
+          content:
+            application/json:
+              example:
+                $ref: "./examples/sa-api-with-auth-filter-cl200-example-1.json"
       security:
         - userRestricted:
           - read:performance-tests
@@ -282,3 +310,30 @@ paths:
       security:
         - userRestricted:
           - read:performance-tests
+
+  /api-simulator/paye/{nino}/iv:
+    get:
+      summary: PAYE API with auth filter CL200
+      description: A simple user endpoint with an Auth Filter around the NINO requiring confidence level of 200
+      tags:
+        - api-simulator
+      parameters:
+        - $ref: '#/components/parameters/acceptHeader'
+        - $ref: '#/components/parameters/contentTypeHeader'
+        - name: utr
+          in: path
+          description: Users NINO
+          required: true
+          schema:
+            type: string
+            example: AA111111B
+      responses:
+        200:
+          description: "OK Response"
+          content:
+            application/json:
+              example:
+                $ref: "./examples/paye-api-with-auth-filter-cl200-example-1.json"
+      security:
+        - userRestricted:
+          - read:performance-tests   
