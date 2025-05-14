@@ -34,11 +34,6 @@ components:
           "text/json"
         ]
       required: true
-  examples:
-    helloUserExample:
-      {
-        "message": "Hello User"
-      }
   securitySchemes:
     userRestricted:
       type: oauth2
@@ -67,7 +62,7 @@ paths:
           content:
             application/json:
               example:
-                $ref: '#/components/examples/helloUserExample'
+                $ref: './examples/user-api-with-post-example-1.json'
       security:
         - userRestricted:
           - read:performance-tests
@@ -86,7 +81,7 @@ paths:
           content:
             application/json:
               example:
-                $ref: '#/components/examples/helloUserExample'
+                $ref: './examples/user-api-with-put-example-1.json'
       security:
         - userRestricted:
           - read:performance-tests
@@ -113,9 +108,7 @@ paths:
           content:
             application/json:
               example:
-                {
-                  "message": "asdfsdfsdfdfgtrhrtutyjhgmaryjy"
-                }
+                $ref: './examples/user-api-with-data-example-1.json'
       security:
         - userRestricted:
           - read:performance-tests
@@ -142,7 +135,7 @@ paths:
           content:
             application/json:
               example:
-                $ref: '#/components/examples/helloUserExample'
+                $ref: './examples/user-api-with-latency-example-1.json'
       security:
         - userRestricted:
           - read:performance-tests
