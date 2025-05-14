@@ -5,6 +5,13 @@
     "context": "api-simulator",
     "versions": [
       {
+        "version": "1.0",
+        "access" : {
+          "type" : "PRIVATE"
+        },
+        "status": "BETA"
+      },
+      {
         "version": "2.0",
         "access" : {
           "type" : "PRIVATE"

@@ -34,6 +34,23 @@ components:
           "application/hal+json"
         ]
       required: true
+    utrPathParam:  
+      name: utr
+      in: path
+      description: Unique Tax Reference
+      required: true
+      schema:
+        type: integer
+        format: int32
+        example: 1073741823
+    ninoPathParam:
+      name: nino
+      in: path
+      description: Users NINO
+      required: true
+      schema:
+        type: string
+        example: AA111111B
   securitySchemes:
     applicationRestricted:
       type: oauth2
@@ -236,15 +253,7 @@ paths:
         - api-simulator
       parameters:
         - $ref: '#/components/parameters/acceptHeader'
-        - $ref: '#/components/parameters/contentTypeHeader'
-        - name: utr
-          in: path
-          description: Users UTR
-          required: true
-          schema:
-            type: integer
-            format: int32
-            example: 1073741823
+        - $ref: '#/components/parameters/utrPathParam'
       responses:
         200:
           description: "OK Response"
@@ -264,15 +273,7 @@ paths:
         - api-simulator
       parameters:
         - $ref: '#/components/parameters/acceptHeader'
-        - $ref: '#/components/parameters/contentTypeHeader'
-        - name: utr
-          in: path
-          description: Users UTR
-          required: true
-          schema:
-            type: integer
-            format: int32
-            example: 1073741823
+        - $ref: '#/components/parameters/utrPathParam'
       responses:
         200:
           description: "OK Response"
@@ -292,14 +293,7 @@ paths:
         - api-simulator
       parameters:
         - $ref: '#/components/parameters/acceptHeader'
-        - $ref: '#/components/parameters/contentTypeHeader'
-        - name: utr
-          in: path
-          description: Users NINO
-          required: true
-          schema:
-            type: string
-            example: AA111111B
+        - $ref: '#/components/parameters/ninoPathParam'
       responses:
         200:
           description: "OK Response"
@@ -319,14 +313,7 @@ paths:
         - api-simulator
       parameters:
         - $ref: '#/components/parameters/acceptHeader'
-        - $ref: '#/components/parameters/contentTypeHeader'
-        - name: utr
-          in: path
-          description: Users NINO
-          required: true
-          schema:
-            type: string
-            example: AA111111B
+        - $ref: '#/components/parameters/ninoPathParam'
       responses:
         200:
           description: "OK Response"
