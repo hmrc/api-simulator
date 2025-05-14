@@ -70,7 +70,8 @@ components:
           tokenUrl: https://api.service.hmrc.gov.uk/oauth/token
           refreshUrl: https://api.service.hmrc.gov.uk/oauth/refresh
           scopes:
-            read:performance-tests: Performance tests
+            read:performance-tests: Performance tests confidenceLevel 50
+            read:performance-tests-200: Performance tests confidenceLevel 200
 
 paths:
   /api-simulator/world:
@@ -283,7 +284,7 @@ paths:
                 $ref: "./examples/sa-api-with-auth-filter-cl200-example-1.json"
       security:
         - userRestricted:
-          - read:performance-tests
+          - read:performance-tests-200
 
   /api-simulator/paye/{nino}/login:
     get:
@@ -323,4 +324,4 @@ paths:
                 $ref: "./examples/paye-api-with-auth-filter-cl200-example-1.json"
       security:
         - userRestricted:
-          - read:performance-tests   
+          - read:performance-tests-200
