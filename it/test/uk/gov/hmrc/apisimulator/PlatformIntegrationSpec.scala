@@ -68,7 +68,7 @@ class PlatformIntegrationSpec extends AnyWordSpec with Matchers with ScalaFuture
       status(result) shouldBe OK
     }
 
-    "provide RAML conf endpoint and RAML for each version" in new Setup {
+    "provide OAS conf endpoint and OAS for each version" in new Setup {
       val definitionResult: Future[Result] = documentationController.definition()(request)
       val bodyString: String               = contentAsString(definitionResult)
       val definitionResponse: JsValue      = Json.parse(bodyString)
@@ -76,7 +76,7 @@ class PlatformIntegrationSpec extends AnyWordSpec with Matchers with ScalaFuture
       val versions: Seq[String] = (definitionResponse \\ "version").map(_.as[String]).toSeq
 
       versions.foreach { version =>
-        val result = documentationController.conf(version, "application.raml")(request)
+        val result = documentationController.conf(version, "application.yaml")(request)
         status(result) shouldBe OK
       }
     }

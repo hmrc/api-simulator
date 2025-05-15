@@ -2,7 +2,7 @@ import sbt._
 
 object AppDependencies {
 
-  lazy val bootstrapVersion = "9.0.0"
+  lazy val bootstrapVersion = "9.11.0"
 
   def apply(): Seq[ModuleID] = compile ++ test
 
