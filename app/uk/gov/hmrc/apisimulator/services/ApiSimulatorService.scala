@@ -37,6 +37,8 @@ trait ApiSimulatorService {
 
   def application(implicit hc: HeaderCarrier): Future[Hello]
 
+  def applicationWithLatency(latency: Int)(implicit hc: HeaderCarrier): Future[Unit]
+
   def user(implicit hc: HeaderCarrier): Future[Hello]
 }
 
@@ -61,13 +63,19 @@ class LiveService @Inject() (system: ActorSystem)(implicit val ec: ExecutionCont
     Future.successful(Hello("Hello Application"))
   }
 
+  override def applicationWithLatency(latency: Int)(implicit hc: HeaderCarrier): Future[Unit] = {
+    val delay: FiniteDuration = latency.millis
+    pattern.after[Unit](delay, system.scheduler)(Future.successful(()))
+  }
+
   override def user(implicit hc: HeaderCarrier): Future[Hello] = {
     Future.successful(Hello("Hello User"))
   }
 }
 
 @Singleton
-class SandboxService extends ApiSimulatorService {
+class SandboxService @Inject() (system: ActorSystem)(implicit val ec: ExecutionContext) extends ApiSimulatorService {
+  import scala.concurrent.duration._
 
   override def userApiWithLatency(latencyInMs: Int)(implicit hc: HeaderCarrier): Future[Hello] = {
     Thread.sleep(latencyInMs)
@@ -84,6 +92,11 @@ class SandboxService extends ApiSimulatorService {
 
   override def application(implicit hc: HeaderCarrier): Future[Hello] = {
     Future.successful(Hello("Hello Sandbox Application"))
+  }
+
+  override def applicationWithLatency(latency: Int)(implicit hc: HeaderCarrier): Future[Unit] = {
+    val delay: FiniteDuration = latency.millis
+    pattern.after[Unit](delay, system.scheduler)(Future.successful(()))
   }
 
   override def user(implicit hc: HeaderCarrier): Future[Hello] = {

@@ -33,7 +33,25 @@ components:
           "application/json"
         ]
       required: true
+    latencyPathParam:
+      name: latency
+      in: path
+      description: The latency of the service to respond in milliseconds.
+      required: true
+      schema:
+        type: integer
+        format: int32
+        example: 1073741823
   securitySchemes:
+    applicationRestricted:
+      type: oauth2
+      description: |
+        HMRC supports OAuth 2.0 for authenticating application restricted API requests using an OAuth 2.0 Bearer Token in the AUTHORIZATION header.
+        See https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/application-restricted-endpoints for details.
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.service.hmrc.gov.uk/oauth/token
+          scopes: {}
     userRestricted:
       type: oauth2
       description: HMRC supports OAuth 2.0 for authenticating User-restricted API requests
@@ -119,15 +137,7 @@ paths:
       tags:
         - api-simulator
       parameters:
-        - $ref: '#/components/parameters/acceptHeader'
-        - name: latency
-          in: path
-          description: The latency of the service to respond in milliseconds.
-          required: true
-          schema:
-            type: integer
-            format: int32
-            example: 1073741823
+        - $ref: '#/components/parameters/latencyPathParam'
       responses:
         200:
           description: "OK Response"
@@ -138,4 +148,18 @@ paths:
       security:
         - userRestricted:
           - read:performance-tests
-      
+
+  /api-simulator/application/accepted/latency/{latency}:
+    post:
+      summary: A general application restricted endpoint that returns an ACCEPTED response.
+      description: |
+        An endpoint that can be used to test calling an application restricted endpoint using POST
+        and returning an ACCEPTED response with a given latency.
+      parameters:
+        - $ref: '#/components/parameters/acceptHeader'
+        - $ref: '#/components/parameters/latencyPathParam'
+      responses:
+        202:
+          description: "ACCEPTED Response"
+      security:
+        - applicationRestricted: []
