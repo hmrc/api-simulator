@@ -9,7 +9,7 @@ object AppDependencies {
   lazy val compile = Seq(
     "uk.gov.hmrc"         %% "bootstrap-backend-play-30"        %  bootstrapVersion,
     "uk.gov.hmrc"         %% "domain-play-30"                   % "9.0.0",
-    "commons-io"          %  "commons-io"                       % "2.11.0"
+    "commons-io"          %  "commons-io"                       % "2.14.0"
   )
 
   lazy val test = Seq(
