@@ -118,6 +118,7 @@ trait ApiSimulator extends BackendController with HeaderValidator with BodyParse
 
   final def applicationWithLatency(latency: Int): Action[AnyContent] = Action.async { implicit request =>
     logger.info("Headers: " + request.headers)
+    logger.info("Request Body: " + request.body.asText.get)
     if (acceptHeaderValidationRules(request.headers.get(ACCEPT))) {
       service.applicationWithLatency(latency).map(_ => Accepted)
     } else {
