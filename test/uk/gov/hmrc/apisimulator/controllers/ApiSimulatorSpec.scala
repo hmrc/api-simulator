@@ -22,10 +22,11 @@ import scala.concurrent.Future
 import scala.concurrent.Future.successful
 
 import org.apache.pekko.stream.Materializer
-import org.mockito.ArgumentMatchers
-import org.mockito.scalatest.MockitoSugar
+import org.mockito.ArgumentMatchers.{eq => eqTo, _}
+import org.mockito.Mockito.when
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
 import play.api.libs.json.{JsValue, Json}
@@ -37,11 +38,9 @@ import uk.gov.hmrc.auth.core.retrieve.EmptyRetrieval
 import uk.gov.hmrc.auth.core.{AuthConnector, InsufficientConfidenceLevel}
 import uk.gov.hmrc.domain.{Generator, Nino, SaUtr}
 
-import uk.gov.hmrc.apisimulator.controllers.{AuthLiveController, IVLiveController}
 import uk.gov.hmrc.apisimulator.services.LiveService
 
-class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite
-    with MockitoSugar {
+class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite with MockitoSugar {
 
   trait Setup {
     implicit val mat: Materializer       = fakeApplication().materializer
@@ -67,7 +66,7 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
   "AuthLiveController" when {
     "calling the nino endpoint" should {
       "return a successful response" in new AuthLiveSetup {
-        when(mockAuthConnector.authorise(*, ArgumentMatchers.eq(EmptyRetrieval))(*, *)).thenReturn(successful(()))
+        when(mockAuthConnector.authorise(any, eqTo(EmptyRetrieval))(any, any)).thenReturn(successful(()))
 
         val result: Future[Result] = underTest.nino(nino)(fakeRequest)
 
@@ -76,7 +75,7 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
       }
 
       "return 401 if the user does not have a sufficient confidence level" in new AuthLiveSetup {
-        when(mockAuthConnector.authorise(*, ArgumentMatchers.eq(EmptyRetrieval))(*, *)).thenReturn(Future.failed(InsufficientConfidenceLevel()))
+        when(mockAuthConnector.authorise(any, eqTo(EmptyRetrieval))(any, any)).thenReturn(Future.failed(InsufficientConfidenceLevel()))
 
         val result: Future[Result] = underTest.nino(nino)(fakeRequest)
 
@@ -87,7 +86,7 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
 
     "calling the utr endpoint" should {
       "return a successful response" in new AuthLiveSetup {
-        when(mockAuthConnector.authorise(*, ArgumentMatchers.eq(EmptyRetrieval))(*, *)).thenReturn(successful(()))
+        when(mockAuthConnector.authorise(any, eqTo(EmptyRetrieval))(any, any)).thenReturn(successful(()))
 
         val result: Future[Result] = underTest.utr(utr)(fakeRequest)
 
@@ -96,7 +95,7 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
       }
 
       "return 401 if the user does not have a sufficient confidence level" in new AuthLiveSetup {
-        when(mockAuthConnector.authorise(*, ArgumentMatchers.eq(EmptyRetrieval))(*, *)).thenReturn(Future.failed(InsufficientConfidenceLevel()))
+        when(mockAuthConnector.authorise(any, eqTo(EmptyRetrieval))(any, any)).thenReturn(Future.failed(InsufficientConfidenceLevel()))
 
         val result: Future[Result] = underTest.utr(utr)(fakeRequest)
 
@@ -109,7 +108,7 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
   "IVLiveController" when {
     "calling the nino endpoint" should {
       "return a successful response" in new IVLiveSetup {
-        when(mockAuthConnector.authorise(*, ArgumentMatchers.eq(EmptyRetrieval))(*, *)).thenReturn(successful(()))
+        when(mockAuthConnector.authorise(any, eqTo(EmptyRetrieval))(any, any)).thenReturn(successful(()))
 
         val result: Future[Result] = underTest.nino(nino)(fakeRequest)
 
@@ -118,7 +117,7 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
       }
 
       "return 401 if the user does not have a sufficient confidence level" in new IVLiveSetup {
-        when(mockAuthConnector.authorise(*, ArgumentMatchers.eq(EmptyRetrieval))(*, *)).thenReturn(Future.failed(InsufficientConfidenceLevel()))
+        when(mockAuthConnector.authorise(any, eqTo(EmptyRetrieval))(any, any)).thenReturn(Future.failed(InsufficientConfidenceLevel()))
 
         val result: Future[Result] = underTest.nino(nino)(fakeRequest)
 
@@ -129,7 +128,7 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
 
     "calling the utr endpoint" should {
       "return a successful response" in new IVLiveSetup {
-        when(mockAuthConnector.authorise(*, ArgumentMatchers.eq(EmptyRetrieval))(*, *)).thenReturn(successful(()))
+        when(mockAuthConnector.authorise(any, eqTo(EmptyRetrieval))(any, any)).thenReturn(successful(()))
 
         val result: Future[Result] = underTest.utr(utr)(fakeRequest)
 
@@ -138,7 +137,7 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
       }
 
       "return 401 if the user does not have a sufficient confidence level" in new IVLiveSetup {
-        when(mockAuthConnector.authorise(*, ArgumentMatchers.eq(EmptyRetrieval))(*, *)).thenReturn(Future.failed(InsufficientConfidenceLevel()))
+        when(mockAuthConnector.authorise(any, eqTo(EmptyRetrieval))(any, any)).thenReturn(Future.failed(InsufficientConfidenceLevel()))
 
         val result: Future[Result] = underTest.utr(utr)(fakeRequest)
 
@@ -147,5 +146,4 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
       }
     }
   }
-
 }

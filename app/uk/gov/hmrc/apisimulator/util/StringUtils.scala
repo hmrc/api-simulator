@@ -20,5 +20,8 @@ import org.apache.commons.lang3.RandomStringUtils
 
 object StringUtils {
 
-  def generateRandomString(numberOfChars: Int): String = RandomStringUtils.randomAlphanumeric(numberOfChars)
+  // RandomStringUtils.randomAlphanumeric is deprecated.
+  // The replacement is to use either insecure, secure or secureStrong RNGs and generate an alpha numeric string using that.
+  // I have chosen secure here because it felt like a good enough replacement for the old code.
+  def generateRandomString(numberOfChars: Int): String = RandomStringUtils.secure.nextAlphanumeric(numberOfChars)
 }

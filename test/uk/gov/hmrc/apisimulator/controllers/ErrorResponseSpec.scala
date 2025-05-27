@@ -21,8 +21,6 @@ import org.scalatest.wordspec.AnyWordSpec
 
 import play.api.libs.json.Json
 
-import uk.gov.hmrc.apisimulator.controllers._
-
 class ErrorResponseSpec extends AnyWordSpec with Matchers {
 
   "errorResponse" should {

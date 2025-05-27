@@ -22,7 +22,6 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
 import uk.gov.hmrc.apisimulator.controllers.HeaderValidator
-import uk.gov.hmrc.apisimulator.util.StringUtils
 
 class StringUtilsSpec extends AnyWordSpec with Matchers with HeaderValidator {
 

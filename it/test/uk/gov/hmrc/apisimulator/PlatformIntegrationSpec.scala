@@ -31,7 +31,7 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import play.api.test.{FakeRequest, StubControllerComponentsFactory}
-import play.api.{Application, Mode}
+import play.api.{Application, Environment, Mode}
 import play.mvc.Http.Status.OK
 
 import uk.gov.hmrc.apisimulator.controllers.Documentation
@@ -58,7 +58,8 @@ class PlatformIntegrationSpec extends AnyWordSpec with Matchers with ScalaFuture
   trait Setup {
     implicit val mat: Materializer = app.materializer
     val meta                       = app.injector.instanceOf[AssetsMetadata]
-    val documentationController    = new Documentation(DefaultHttpErrorHandler, stubControllerComponents(), meta) {}
+    val env                        = app.injector.instanceOf[Environment]
+    val documentationController    = new Documentation(DefaultHttpErrorHandler, meta, env) {}
     val request                    = FakeRequest()
   }
 

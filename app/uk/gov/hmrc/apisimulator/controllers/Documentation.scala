@@ -21,11 +21,12 @@ import javax.inject.Inject
 import com.google.inject.Singleton
 import controllers.{AssetsBuilder, AssetsMetadata}
 
+import play.api.Environment
 import play.api.http.HttpErrorHandler
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import play.api.mvc.{Action, AnyContent}
 
 @Singleton
-class Documentation @Inject() (httpErrorHandler: HttpErrorHandler, cc: ControllerComponents, meta: AssetsMetadata) extends AssetsBuilder(httpErrorHandler, meta) {
+class Documentation @Inject() (httpErrorHandler: HttpErrorHandler, meta: AssetsMetadata, env: Environment) extends AssetsBuilder(httpErrorHandler, meta, env) {
 
   def definition(): Action[AnyContent] = {
     super.at(s"/public/api", "definition.json")
