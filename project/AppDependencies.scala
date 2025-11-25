@@ -2,7 +2,7 @@ import sbt._
 
 object AppDependencies {
 
-  lazy val bootstrapVersion = "9.11.0"
+  lazy val bootstrapVersion = "9.19.0"
 
   def apply(): Seq[ModuleID] = compile ++ test
 
@@ -15,6 +15,6 @@ object AppDependencies {
   lazy val test = Seq(
     "uk.gov.hmrc"             %% "bootstrap-test-play-30"       % bootstrapVersion,
     "org.mockito"             %% "mockito-scala-scalatest"      % "1.17.30",
-    "org.pegdown"             %  "pegdown"                      % "1.6.0"
+//    "org.pegdown"             %  "pegdown"                      % "1.6.0"
   ).map(_ % "test")
 }
