@@ -15,8 +15,6 @@ object AppDependencies {
   lazy val test = Seq(
     "uk.gov.hmrc"             %% "bootstrap-test-play-30"       % bootstrapVersion,
     "org.mockito"             %% "mockito-scala-scalatest"      % "1.17.30",
-    "org.pegdown"             %  "pegdown"                      % "1.6.0",
-    "io.cucumber"             %% "cucumber-scala"               % "8.14.1",
-    "io.cucumber"             %  "cucumber-junit"               % "7.11.1"
+    "org.pegdown"             %  "pegdown"                      % "1.6.0"
   ).map(_ % "test")
 }
