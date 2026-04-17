@@ -64,6 +64,10 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
     val underTest = new IVLiveController(mock[LiveService], mockAuthConnector, stubControllerComponents())
   }
 
+  trait ApiDefinitionSetup extends Setup with StubControllerComponentsFactory {
+    val underTest = new LiveController(mock[LiveService], mockAuthConnector, stubControllerComponents())
+  }
+
   "AuthLiveController" when {
     "calling the nino endpoint" should {
       "return a successful response" in new AuthLiveSetup {
@@ -144,6 +148,17 @@ class ApiSimulatorSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuit
 
         status(result) shouldBe UNAUTHORIZED
         (jsonBodyOf(result) \ "message").as[String] shouldBe "Bearer token is missing or not authorized"
+      }
+    }
+  }
+
+  "Tests for API Definition" when {
+    "calling apiGateway" should {
+      "return 201 and a random Request Id" in new ApiDefinitionSetup {
+        val result = underTest.apiGateway("hello--1.0")(fakeRequest)
+
+        status(result) shouldBe ACCEPTED
+        (jsonBodyOf(result) \ "RequestId").as[String] should not be empty
       }
     }
   }
