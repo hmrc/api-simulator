@@ -20,5 +20,5 @@ import org.apache.commons.lang3.RandomStringUtils
 
 object StringUtils {
 
-  def generateRandomString(numberOfChars: Int): String = RandomStringUtils.randomAlphanumeric(numberOfChars)
+  def generateRandomString(numberOfChars: Int): String = RandomStringUtils.insecure().nextAlphanumeric(numberOfChars)
 }

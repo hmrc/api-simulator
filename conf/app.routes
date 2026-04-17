@@ -31,3 +31,6 @@ GET         /sandbox/sa/:utr/iv                         uk.gov.hmrc.apisimulator
 GET         /sandbox/sa/:utr/login                      uk.gov.hmrc.apisimulator.controllers.SandboxController.utr(utr: SaUtr)
 
 POST        /application/accepted/latency/:latency      uk.gov.hmrc.apisimulator.controllers.LiveController.applicationWithLatency(latency: Int)
+
+# API Gateway Simulation for api-definition local runs
+PUT         /v1/api/:apiContextAndVersion               uk.gov.hmrc.apisimulator.controllers.LiveController.apiGateway(apiContextAndVersion: String)
