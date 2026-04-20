@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.apisimulator.controllers
 
+import java.util.UUID
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -125,6 +126,10 @@ trait ApiSimulator extends BackendController with HeaderValidator with BodyParse
     }
   }
 
+  final def apiGateway(apiContextAndVersion: String): Action[AnyContent] = Action.async { implicit request =>
+    logger.info(s"Simulating call to add $apiContextAndVersion to AWS API Gateway.")
+    Future.successful(Accepted(Json.obj("RequestId" -> UUID.randomUUID())))
+  }
 }
 
 @Singleton
