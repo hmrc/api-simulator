@@ -126,10 +126,16 @@ trait ApiSimulator extends BackendController with HeaderValidator with BodyParse
     }
   }
 
-  final def apiGateway(apiContextAndVersion: String): Action[AnyContent] = Action.async { implicit request =>
-    logger.info(s"Simulating call to add $apiContextAndVersion to AWS API Gateway.")
+  final def apiGatewayPut(apiContextAndVersion: String): Action[AnyContent] = Action.async { implicit request =>
+    logger.info(s"Simulating call to add or update $apiContextAndVersion to AWS API Gateway.")
     Future.successful(Accepted(Json.obj("RequestId" -> UUID.randomUUID())))
   }
+
+  final def apiGatewayDelete(apiContextAndVersion: String): Action[AnyContent] = Action.async { implicit request =>
+    logger.info(s"Simulating call to delete $apiContextAndVersion from AWS API Gateway.")
+    Future.successful(Accepted(Json.obj("RequestId" -> UUID.randomUUID())))
+  }
+
 }
 
 @Singleton
